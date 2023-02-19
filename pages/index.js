@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -37,13 +38,14 @@ export default function Home() {
       </main>
 
       <footer>
+        <Link href="#">Dashboard</Link>
         <a href="#">My Stats</a>
         <a href="#">Calendar</a>
         <a href="#">Build Routine</a>
         <a href="#">Explore</a>
         <a href="#">Reports</a>
         <a href="#">Preferences</a>
-        <a href="#">Import Data</a>
+        <Link href="/import-data">Import Data</Link>
       </footer>
 
       <style jsx>{`
