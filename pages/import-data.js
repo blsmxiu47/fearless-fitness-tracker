@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import Link from "next/link";
+import Layout from '../components/layout';
 
 export default function ImportData() {
     return (
-        <>
+        <Layout>
             <Head>
                 <title>Import Data</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -19,6 +20,6 @@ export default function ImportData() {
                 <a href="#">Preferences</a>
                 <Link href="#">Import Data</Link>
             </footer>
-        </>
-    )
+        </Layout>
+    );
 }
