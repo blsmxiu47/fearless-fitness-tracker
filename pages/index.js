@@ -12,6 +12,7 @@ export default function Home() {
       </Head>
 
       <main>
+        <a href="/api/auth/login">Login</a>
         <h1 className={styles.title}>
           Fearless Fitness Tracker
         </h1>
