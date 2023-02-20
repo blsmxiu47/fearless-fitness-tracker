@@ -10,6 +10,8 @@ export default function ImportData() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <h1>Import Data</h1>
+            <p>Import data from other accounts or reports exported from other activity trackers such as Garmin Connect, Fitbit, or Strava.</p>
+            <p>Accepted file extensions: .xls, .xlsx, or .csv</p>
             <footer>
                 <Link href="/">Dashboard</Link>
                 <a href="#">My Stats</a>
