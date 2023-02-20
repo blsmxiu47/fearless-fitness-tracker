@@ -16,3 +16,8 @@
 - Calendar
     - Calendar
 - ...TODO
+
+### Implementations
+- User authentication
+- User data storage and access
+- User data visualizations
