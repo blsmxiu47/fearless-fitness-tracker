@@ -1,15 +1,13 @@
+import '../styles/globals.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import { ReactElement } from 'react';
+import type { AppProps } from 'next/app';
 
-interface Props {
-  Component: React.ComponentType,
-  pageProps: ReactElement
-}
-
-export default function App({ Component, pageProps }: Props) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <UserProvider>
       <Component {...pageProps} />
     </UserProvider>
   );
 }
+
+export default App;

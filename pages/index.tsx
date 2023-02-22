@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 import Layout from '../components/layout';
 import Link from 'next/link';
 
@@ -11,35 +10,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <main className="container mx-auto my-12 px-4 md:px-12">
         <a href="/api/auth/login">Login</a>
-        <h1 className={styles.title}>
+        <h1 className="text-lg">
           Fearless Fitness Tracker
         </h1>
-
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h3>Activities</h3>
-            <div>pyo</div>
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h3>Activities Time</h3>
-            <div>pyo</div>
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h3>Distance</h3>
-            <div>pyo</div>
+        <div className="flex flex-wrap -mx-2 lg:-mx-4">
+          <div className="my-4 px-1 w-full">
+            <div className="overflow-hidden rounded-lg shadow-lg my-2 md:my-4 lg:my-8">
+              <div className="grid items-center justify-items-center p-4 md:p-8">
+                <h2 className="text-md">Activities</h2>
+                <div className="box-content">pyo</div>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-lg shadow-lg my-2 md:my-4 lg:my-8">
+              <div className="grid items-center justify-items-center p-4 md:p-8">
+                <h2 className="text-md">Activities Time</h2>
+                <div className="box-content">pyo</div>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-lg shadow-lg my-2 md:my-4 lg:my-8">
+              <div className="grid items-center justify-items-center p-4 md:p-8">
+                <h2 className="text-md">Distance</h2>
+                <div className="box-content">pyo</div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
 
-      <footer>
+      <footer className="flex justify-between">
         <Link href="#">Dashboard</Link>
         <a href="#">My Stats</a>
         <a href="#">Calendar</a>
@@ -49,57 +49,6 @@ export default function Home() {
         <a href="#">Preferences</a>
         <Link href="/import-data">Import Data</Link>
       </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
     </Layout>
   )
 }
