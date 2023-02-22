@@ -1,5 +1,5 @@
-export default function Login() {
-  return(
+export default function Login () {
+  return (
     <div className="flex-col align-middle">
         <h1>Hi! 안녕하세요! Please log in to Fearless Fitness Tracker</h1>
         <form>

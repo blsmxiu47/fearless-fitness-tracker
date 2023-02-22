@@ -1,9 +1,9 @@
-import Head from 'next/head';
-import Link from "next/link";
-import Layout from '../components/layout';
+import Head from 'next/head'
+import Link from 'next/link'
+import Layout from '../components/layout'
 
-export default function ImportData() {
-    return (
+export default function ImportData () {
+  return (
         <Layout>
             <Head>
                 <title>Import Data</title>
@@ -26,5 +26,5 @@ export default function ImportData() {
                 </footer>
             </main>
         </Layout>
-    );
+  )
 }
