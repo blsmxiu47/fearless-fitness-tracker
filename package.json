@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./ --ext js,jsx,ts,tsx",
-    "prisma:migrate": "dotenv -e .env.local -- npx prisma migrate deploy"
+    "prisma:push": "dotenv -e .env.local -- npx prisma db push"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.2.1",
+    "@prisma/client": "^4.10.1",
+    "dotenv-cli": "^7.0.0",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"
