@@ -8,7 +8,63 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  firstName  String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  email     String @unique
+  firstName String
+}
+
+model Plan {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  custom Boolean
+}
+
+model Routine {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  custom Boolean
+}
+
+model Type {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  custom Boolean
+}
+
+model Exercise {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  type   String
+  custom Boolean
+}
+
+model Workout {
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  exercises           String[]
+  datetime            DateTime
+  title               String?
+  notes               String?
+  duration            Int?
+  distance            Float?
+  calories            Int?
+  averageHeartRate    Int?
+  maxHeartRate        Int?
+  averageRunCadence   Int?
+  maxRunCadence       Int?
+  averagePace         Float?
+  bestPace            Float?
+  averageLapTime      Int?
+  bestLapTime         Int?
+  numberOfLaps        Int?
+  totalAscent         Int?
+  totalDescent        Int?
+  averageStrideLength Float?
+  minElevation        Int?
+  maxElevation        Int?
+}
+
+model Shoe {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  model       String
+  description String?
 }
