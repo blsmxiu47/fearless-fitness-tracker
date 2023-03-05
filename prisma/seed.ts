@@ -1,68 +1,9 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+import { exerciseData } from './seed/exercises'
+import { typeData } from './seed/types'
+import { userData } from './seed/users'
 
 const prisma = new PrismaClient()
-
-const userData: Prisma.UserCreateInput[] = [
-  {
-    email: 'testuser@gmail.com',
-    firstName: 'MissingNo.'
-  }
-]
-
-const typeData: Prisma.TypeCreateInput[] = [
-  {
-    name: 'Cardio',
-    custom: false
-  },
-  {
-    name: 'Core',
-    custom: false
-  },
-  {
-    name: 'Gym',
-    custom: false
-  },
-  {
-    name: 'HIIT',
-    custom: false
-  },
-  {
-    name: 'Lifting',
-    custom: false
-  },
-  {
-    name: 'Pilates',
-    custom: false
-  },
-  {
-    name: 'Running',
-    custom: false
-  },
-  {
-    name: 'Strength Training',
-    custom: false
-  },
-  {
-    name: 'Swimming',
-    custom: false
-  },
-  {
-    name: 'Walking',
-    custom: false
-  },
-  {
-    name: 'Yoga',
-    custom: false
-  }
-]
-
-const exerciseData: Prisma.ExerciseCreateInput[] = [
-  {
-    name: '',
-    type: '',
-    custom: false
-  }
-]
 
 const routineData: Prisma.RoutineCreateInput[] = [
   {
@@ -80,6 +21,34 @@ const planData: Prisma.PlanCreateInput[] = [
 
 async function main () {
   console.log('Start seeding ...')
+  console.log('Seeding exercises...')
+  for (const e of exerciseData) {
+    const exercise = await prisma.exercise.create({
+      data: e
+    })
+    console.log(`Created exercise with id: ${exercise.id}`)
+  }
+  // console.log('Seeding types...')
+  // for (const t of typeData) {
+  //   const type = await prisma.type.create({
+  //     data: t
+  //   })
+  //   console.log(`Created type with id: ${type.id}`)
+  // }
+  // console.log('Seeding types...')
+  // for (const t of typeData) {
+  //   const type = await prisma.type.create({
+  //     data: t
+  //   })
+  //   console.log(`Created type with id: ${type.id}`)
+  // }
+  console.log('Seeding types...')
+  for (const t of typeData) {
+    const type = await prisma.type.create({
+      data: t
+    })
+    console.log(`Created type with id: ${type.id}`)
+  }
   console.log('Seeding users...')
   for (const u of userData) {
     const user = await prisma.user.create({
