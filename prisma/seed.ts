@@ -9,19 +9,74 @@ const userData: Prisma.UserCreateInput[] = [
   }
 ]
 
-// const routineData: Prisma.RoutineCreateInput[] = [
-//   {
-//     name: 'test',
-//     custom: false
-//   },
-// ]
+const typeData: Prisma.TypeCreateInput[] = [
+  {
+    name: 'Cardio',
+    custom: false
+  },
+  {
+    name: 'Core',
+    custom: false
+  },
+  {
+    name: 'Gym',
+    custom: false
+  },
+  {
+    name: 'HIIT',
+    custom: false
+  },
+  {
+    name: 'Lifting',
+    custom: false
+  },
+  {
+    name: 'Pilates',
+    custom: false
+  },
+  {
+    name: 'Running',
+    custom: false
+  },
+  {
+    name: 'Strength Training',
+    custom: false
+  },
+  {
+    name: 'Swimming',
+    custom: false
+  },
+  {
+    name: 'Walking',
+    custom: false
+  },
+  {
+    name: 'Yoga',
+    custom: false
+  }
+]
 
-// const planData: Prisma.UserCreateInput[] = [
-//   {
-//     name: 'test',
-//     custom: false
-//   },
-// ]
+const exerciseData: Prisma.ExerciseCreateInput[] = [
+  {
+    name: '',
+    type: '',
+    custom: false
+  }
+]
+
+const routineData: Prisma.RoutineCreateInput[] = [
+  {
+    name: 'test',
+    custom: false
+  }
+]
+
+const planData: Prisma.PlanCreateInput[] = [
+  {
+    name: 'test',
+    custom: false
+  }
+]
 
 async function main () {
   console.log('Start seeding ...')
