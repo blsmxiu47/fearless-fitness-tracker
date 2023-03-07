@@ -31,11 +31,18 @@ model Type {
   custom Boolean
 }
 
+model Focus {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  custom Boolean
+}
+
 model Exercise {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String @unique
   type   String
   custom Boolean
+  focus  String?
 }
 
 model Workout {
