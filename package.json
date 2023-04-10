@@ -15,9 +15,12 @@
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.2.1",
     "@prisma/client": "^4.10.1",
+    "@types/react-big-calendar": "^1.6.3",
     "dotenv-cli": "^7.0.0",
+    "moment": "^2.29.4",
     "next": "latest",
     "react": "18.2.0",
+    "react-big-calendar": "^1.6.9",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
