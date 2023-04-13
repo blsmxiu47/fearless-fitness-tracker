@@ -9,7 +9,11 @@ const prisma = new PrismaClient();
 
 async function fetchWorkoutsFromDatabase(userId: string): Promise<Workout[]> {
   try {
-    const workouts = await prisma.workout.findMany({}); // TODO: Fetch workouts from the database
+    const workouts = await prisma.workout.findMany({
+      where: {
+        userId: userId,
+      },
+    });
     return workouts;
   } catch (error) {
     console.error('Error fetching workouts:', error);
@@ -32,10 +36,9 @@ const CalendarPage: React.FC = () => {
   const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    async function fetchWorkouts() {
-      // Fetch workouts using Prisma
-      // TODO: Implement this function to fetch workouts using Prisma
-      const workouts = await fetchWorkoutsFromDatabase(); 
+    async function fetchWorkouts(userId: string) {
+      // Fetch workouts from database
+      const workouts = await fetchWorkoutsFromDatabase(userId); 
   
       // Convert workouts to CustomEvent objects
       const formattedEvents = workouts.map((workout) => ({
