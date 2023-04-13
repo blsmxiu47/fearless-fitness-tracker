@@ -17,24 +17,28 @@ model Plan {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String @unique
   custom Boolean
+  userId String?
 }
 
 model Routine {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String @unique
   custom Boolean
+  userId String?
 }
 
 model Type {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String @unique
   custom Boolean
+  userId String?
 }
 
 model Focus {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String @unique
   custom Boolean
+  userId String?
 }
 
 model Exercise {
@@ -42,6 +46,7 @@ model Exercise {
   name   String @unique
   type   String
   custom Boolean
+  userId String?
   focus  String?
 }
 
@@ -49,6 +54,7 @@ model Workout {
   id                  String @id @default(auto()) @map("_id") @db.ObjectId
   exercises           String[]
   datetime            DateTime
+  userId              String
   title               String?
   notes               String?
   duration            Int?
@@ -73,5 +79,6 @@ model Workout {
 model Shoe {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   model       String
+  userId      String?
   description String?
 }
