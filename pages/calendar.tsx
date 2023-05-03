@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Calendar, momentLocalizer, View } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Workout } from '../types';
 import { PrismaClient } from '@prisma/client';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { Workout } from '../types';
+
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const prisma = new PrismaClient();
 
@@ -34,6 +36,7 @@ const CalendarPage: React.FC = () => {
   const [events, setEvents] = useState<CustomEvent[]>([]);
   const [view, setView] = useState<View>('month');
   const [date, setDate] = useState<Date>(new Date());
+  const { user } = useUser();
 
   useEffect(() => {
     async function fetchWorkouts(userId: string) {
@@ -42,7 +45,6 @@ const CalendarPage: React.FC = () => {
   
       // Convert workouts to CustomEvent objects
       const formattedEvents = workouts.map((workout) => ({
-        ...workout,
         title: workout.title || 'Untitled',
         start: new Date(workout.datetime),
         end: new Date(workout.datetime),
@@ -53,7 +55,7 @@ const CalendarPage: React.FC = () => {
       setEvents(formattedEvents);
     }
   
-    fetchWorkouts();
+    fetchWorkouts(user!.sub as string);
   }, []);
 
   const localizer = momentLocalizer(moment);
