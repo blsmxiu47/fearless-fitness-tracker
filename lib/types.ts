@@ -22,5 +22,14 @@ export interface Workout {
     averageStrideLength?: number | null;
     minElevation?: number | null;
     maxElevation?: number | null;
-  }
-  
+}
+
+export interface CustomEvent extends Event {
+    title: String,
+    workout: Workout,
+    start: Date,
+    end: Date,
+    allDay: boolean,
+    distance?: number,
+    duration?: number
+}
