@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Workout } from '../../lib/types';
 
 const prisma = new PrismaClient();
 

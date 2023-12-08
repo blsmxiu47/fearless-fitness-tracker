@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Calendar, momentLocalizer, View } from 'react-big-calendar';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Workout, CustomEvent } from '../lib/types';
+import { Workout, CustomEvent } from '../../lib/types';
 // import CustomEventComponent from '../components/calendar/CustomEventComponent';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
