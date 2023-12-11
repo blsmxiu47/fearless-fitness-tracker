@@ -1,4 +1,5 @@
 import '../globals.css'
+import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
 
 
@@ -10,6 +11,8 @@ export default function Home () {
   return (
     <>
         <link rel="icon" href="/favicon.ico" />
+
+        <Sidebar />
 
         <main className="container mx-auto my-12 px-4 md:px-12">
             <a href="/api/auth/login">Login</a>
