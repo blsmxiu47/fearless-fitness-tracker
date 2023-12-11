@@ -1,3 +1,6 @@
+# local temporary dev files
+local_sandbox/
+
 # dependencies
 /node_modules
 /.pnp

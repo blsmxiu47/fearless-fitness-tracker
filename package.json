@@ -13,7 +13,6 @@
     "prisma:studio": "npx dotenv -e .env.local prisma studio"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^2.2.1",
     "@prisma/client": "^4.16.2",
     "@types/react-big-calendar": "^1.6.3",
     "dotenv-cli": "^7.0.0",
