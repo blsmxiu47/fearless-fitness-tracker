@@ -2,6 +2,8 @@
 
 ## Dev ToDos
 
+* add global css variables for colors, fonts, etc.
+
 ### Views
 
 * My Stats (Dashboard/Summary/landing view)
