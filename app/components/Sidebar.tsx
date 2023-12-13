@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { GoGear } from "react-icons/go";
+import { LuUser2 } from "react-icons/lu";
+import { MdLogout } from "react-icons/md";
 import { useSidebar } from '../context/sidebar-provider';
 
 export default function Sidebar() {
@@ -45,17 +48,18 @@ export default function Sidebar() {
                                 <ul className="py-1" role="none">
                                     <li>
                                         <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-0">
-                                            View Profile
+                                            <span className="flex items-center"><LuUser2 className="mr-1" />View Profile</span>
+                                            
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-1">
-                                            Account Settings
+                                        <Link href="#" className="inline-block align-middle px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-1">
+                                            <span className="flex items-center"><GoGear className="mr-1" />Account Settings</span>
                                         </Link>
                                     </li>
                                     <li>
                                         <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-3">
-                                            Sign out
+                                            <span className="flex items-center"><MdLogout className="mr-1" />Sign out</span>
                                         </Link>
                                     </li>
                                 </ul>
