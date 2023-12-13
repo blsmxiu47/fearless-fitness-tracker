@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useSidebar } from '../context/sidebar-provider';
 
 export default function Sidebar() {
@@ -27,29 +28,35 @@ export default function Sidebar() {
                     <div className="flex items-center">
                         <div className="flex items-center ms-3">
                             <div>
-                                <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" onClick={() => setUserMenu(!userMenu)}>
+                                <button type="button" id="user-menu-button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="true" aria-haspopup="true" onClick={() => setUserMenu(!userMenu)}>
                                     <span className="sr-only">Open user menu</span>
                                     <img className="w-8 h-8 rounded-full" src="https://placeholder.pics/svg/300" alt="user photo" />
                                 </button>
                             </div>
-                            <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                            <div className={`z-50 absolute origin-top-right right-0 top-10 my-4 px-2 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 ${userMenu ? "" : "hidden"}`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
                                 <div className="px-4 py-3" role="none">
                                     <p className="text-sm text-gray-900 dark:text-white" role="none">
-                                    userName from DB
+                                        userName from DB
                                     </p>
                                     <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                    userEmail from DB
+                                        userEmail from DB
                                     </p>
                                 </div>
                                 <ul className="py-1" role="none">
                                     <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">View Profile</a>
+                                        <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-0">
+                                            View Profile
+                                        </Link>
                                     </li>
                                     <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Account Settings</a>
+                                        <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-1">
+                                            Account Settings
+                                        </Link>
                                     </li>
                                     <li>
-                                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+                                        <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-3">
+                                            Sign out
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
