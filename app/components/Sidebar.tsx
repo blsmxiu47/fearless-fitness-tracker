@@ -72,7 +72,7 @@ export default function Sidebar() {
             </div>
         </nav>
 
-        <aside className={`fixed top-0 left-0 z-40 h-screen pt-20 bg-white border-r border-gray-200 duration-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700 ${isSidebarOpen ? "w-64" : "w-16"}`} aria-label="Sidebar">
+        <aside className={`fixed top-0 left-0 z-40 h-screen pt-20 bg-white border-r border-gray-200 duration-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700 ${isSidebarOpen ? "w-64" : "-left-10 sm:left-0 w-0 sm:w-16"}`} aria-label="Sidebar">
             <img src="https://placeholder.pics/svg/300" className={`hidden sm:block absolute z-50 cursor-pointer -right-3 top-16 w-7 border-grey-800 dark:border-grey-900 border-2 rounded-full  ${!isSidebarOpen && "rotate-180"}`} onClick={() => toggleSidebar()}
             />
             <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
