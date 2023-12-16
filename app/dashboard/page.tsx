@@ -1,10 +1,10 @@
 'use client'
 
 import '../../globals.css'
-import Card from '../components/Card';
-import TimeRangeSelect from '../components/TimeRangeSelect';
-import TimeUnitSelect from '../components/TimeUnitSelect';
-import LinePlot from '../charts/LinePlot';
+import Card from '../components/Card'
+import TimeRangeSelect from '../components/TimeRangeSelect'
+import TimeUnitSelect from '../components/TimeUnitSelect'
+import LinePlot from '../charts/LinePlot'
 import { useSidebar } from '../context/sidebar-provider'
 
 export default function Home () {
