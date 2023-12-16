@@ -2,6 +2,7 @@
 
 import '../../globals.css'
 import Card from '../components/Card';
+import TimeRangeSelect from '../components/TimeRangeSelect';
 import TimeUnitSelect from '../components/TimeUnitSelect';
 import LinePlot from '../charts/LinePlot';
 import { useSidebar } from '../context/sidebar-provider'
@@ -11,7 +12,8 @@ export default function Home () {
     
     return (
         <div className={`py-2 transition-all ${isSidebarOpen ? "sm:ml-64" : "sm:ml-16"}`}>
-                <div className="flex flex-wrap justify-center p-2">
+                <div className="flex flex-wrap justify-center p-2 gap-4">
+                    <TimeRangeSelect />
                     <TimeUnitSelect />
                 </div>
                 <div className="flex flex-wrap my-4 px-1 w-full justify-center">
