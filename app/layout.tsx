@@ -22,7 +22,7 @@ export default function RootLayout({
             <html lang="en">
                 <body className="bg-white dark:bg-gray-900 dark:text-white">
                     <Sidebar />
-                    <main className="container mx-auto my-12 px-4 md:px-12">
+                    <main className="container mx-auto my-14 px-4">
                         {children}
                     </main>
                 </body>
