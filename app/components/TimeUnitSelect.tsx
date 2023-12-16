@@ -1,6 +1,6 @@
 'use client'
 
-export default function Filter() {
+export default function TimeUnitSelect() {
     return (
         <div className="flex flex-col gap-1">
             <label htmlFor="x-grain" className="text-gray-700 dark:text-gray-300 mr-2 font-semibold">Time Series Unit</label>
