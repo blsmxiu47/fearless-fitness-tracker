@@ -3,58 +3,92 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   email     String @unique
   firstName String
+  plans     Plan[]
+  routines  Routine[]
+  types     Type[]
+  focuses   Focus[]
+  exercises Exercise[]
+  workouts  Workout[]
+  shoes     Shoe[]
 }
 
 model Plan {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  custom Boolean
-  userId String?
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User @relation(fields: [userId], references: [id])
+  userId    Int
+  name      String @unique
+  custom    Boolean
 }
 
 model Routine {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  custom Boolean
-  userId String?
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User @relation(fields: [userId], references: [id])
+  userId    Int
+  name      String @unique
+  custom    Boolean
+  duration  Int
+  frequency Int
 }
 
 model Type {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  custom Boolean
-  userId String?
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User @relation(fields: [userId], references: [id])
+  userId    Int
+  name      String @unique
+  custom    Boolean
+  exercises Exercise[]
 }
 
 model Focus {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  custom Boolean
-  userId String?
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User @relation(fields: [userId], references: [id])
+  userId    Int
+  name      String @unique
+  custom    Boolean
+  exercises Exercise[]
 }
 
 model Exercise {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  type   String
-  custom Boolean
-  userId String?
-  focus  String?
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User @relation(fields: [userId], references: [id])
+  userId    Int
+  workouts  Workout[]
+  name      String @unique
+  type      Type @relation(fields: [typeId], references: [id])
+  typeId    Int
+  custom    Boolean
+  focus     Focus @relation(fields: [focusId], references: [id])
+  focusId   Int
 }
 
 model Workout {
-  id                  String @id @default(auto()) @map("_id") @db.ObjectId
-  exercises           String[]
+  id                  Int @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User @relation(fields: [userId], references: [id])
+  userId              Int
+  exercises           Exercise[]
   datetime            DateTime
-  userId              String
   title               String?
   notes               String?
   duration            Int?
@@ -77,8 +111,13 @@ model Workout {
 }
 
 model Shoe {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          Int @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User @relation(fields: [userId], references: [id])
+  userId      Int
   model       String
-  userId      String?
-  description String?
+  description String
+  rating      Int
+  notes       String?
 }
