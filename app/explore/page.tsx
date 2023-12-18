@@ -2,7 +2,7 @@
 
 import '../../globals.css'
 import { useSidebar } from '../context/sidebar-provider'
-import Card from '../components/Card'
+import ExploreCard from '../components/ExploreCard'
 
 export default function Explore() {
     const { isSidebarOpen } = useSidebar();
@@ -12,40 +12,40 @@ export default function Explore() {
             <h2>Explore</h2>
             <div className="mx-2 mt-4">
                 <h3>Exercises</h3>
-                <div className="flex flex-wrap p-2 gap-4">
-                    <Card title={"Exercise 1"} content={<div>Exercise 1</div>} />
-                    <Card title={"Exercise 1"} content={<div>Exercise 1</div>} />
-                    <Card title={"Exercise 1"} content={<div>Exercise 1</div>} />
-                    <Card title={"Exercise 1"} content={<div>Exercise 1</div>} />
-                    <Card title={"Exercise 1"} content={<div>Exercise 1</div>} />
-                    <Card title={"Exercise 1"} content={<div>Exercise 1</div>} />
+                <div className="flex flex-wrap justify-center sm:justify-start p-2">
+                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
                 </div>
             </div>
             <div className="mx-2 mt-4">
                 <h3>Workouts</h3>
-                <div className="flex flex-wrap p-2 gap-4">
-                    <Card title={"Workout 1"} content={<div>Workout 1</div>} />
-                    <Card title={"Workout 1"} content={<div>Workout 1</div>} />
-                    <Card title={"Workout 1"} content={<div>Workout 1</div>} />
-                    <Card title={"Workout 1"} content={<div>Workout 1</div>} />
-                    <Card title={"Workout 1"} content={<div>Workout 1</div>} />
-                    <Card title={"Workout 1"} content={<div>Workout 1</div>} />
+                <div className="flex flex-wrap justify-center sm:justify-start p-2">
+                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
                 </div>
             </div>
             <div className="mx-2 mt-4">
                 <h3>Routines</h3>
-                <div className="flex flex-wrap p-2 gap-4">
-                    <Card title={"Routine 1"} content={<div>Routine 1</div>} />
-                    <Card title={"Routine 1"} content={<div>Routine 1</div>} />
+                <div className="flex flex-wrap justify-center sm:justify-start p-2">
+                    <ExploreCard title={"Routine 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    <ExploreCard title={"Routine 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
                 </div>
             </div>
             <div className="mx-2 mt-4">
                 <h3>Plans</h3>
-                <div className="flex flex-wrap p-2 gap-4">
-                    <Card title={"Plan 1"} content={<div>Plan 1</div>}/>
-                    <Card title={"Plan 1"} content={<div>Plan 1</div>}/>
-                    <Card title={"Plan 1"} content={<div>Plan 1</div>}/>
-                    <Card title={"Plan 1"} content={<div>Plan 1</div>}/>
+                <div className="flex flex-wrap justify-center sm:justify-start p-2">
+                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
+                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
+                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
+                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
                 </div>
             </div>
         </div>
