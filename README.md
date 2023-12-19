@@ -3,6 +3,7 @@
 ## Dev ToDos
 
 * add global css variables for colors, fonts, etc.
+* create an example user in the fft DB with realistic running data to design around and test views/charts
 
 ### Views
 
