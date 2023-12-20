@@ -4,6 +4,7 @@
 
 * add global css variables for colors, fonts, etc.
 * create an example user in the fft DB with realistic running data to design around and test views/charts
+* Constrain and handle user import/input of data that exceeds hard data-related limits e.g. max value for integer and bigint fields in the db (e.g. users should not be allowed to enter a workout duration of 100 years, for example, if we store the duration as an INTEGER value in seconds)
 
 ### Views
 
