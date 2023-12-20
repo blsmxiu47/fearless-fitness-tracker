@@ -30,6 +30,22 @@ model Plan {
   userId    Int
   name      String @unique
   custom    Boolean
+  days      PlanDay[]
+}
+
+model PlanDay {
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  plan      Plan @relation(fields: [planId], references: [id])
+  planId    Int
+  weekNumber Int
+  dayNumber Int
+  description String?
+  sessionA String?
+  sessionB String?
+  totalDuration Int?
+  totalDistance Int?
 }
 
 model Routine {
@@ -40,8 +56,8 @@ model Routine {
   userId    Int
   name      String @unique
   custom    Boolean
-  duration  Int
-  frequency Int
+  duration  String
+  frequency String
 }
 
 model Type {
@@ -92,7 +108,7 @@ model Workout {
   title               String?
   notes               String?
   duration            Int?
-  distance            Float?
+  distance            Int?
   calories            Int?
   averageHeartRate    Int?
   maxHeartRate        Int?
