@@ -1,3 +1,7 @@
+# Python stuff
+fft_env/
+requirements.txt
+
 # docker-compose
 compose.yml
 
