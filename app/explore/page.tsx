@@ -5,10 +5,10 @@ import { useState, useEffect } from 'react'
 import '../../globals.css'
 import { useSidebar } from '../context/sidebar-provider'
 import ExploreCard from '../components/ExploreCard'
-import handle from '../api/plan'
 import { Plan } from '../../lib/types'
 
 export default function Explore() {
+    // TODO: checkboxes state for filtering content
     const [plans, setPlans] = useState<Plan[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,7 +16,16 @@ export default function Explore() {
 
     const fetchPlans = async () => {
         try {
-            const res = await fetch('/api/plan')
+            const res = await fetch(
+                '/api/plan',
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }
+            )
+            console.log('fetchPlans res:', res)
             if (!res.ok) throw new Error(res.statusText)
             return await res.json()
         } catch (error) {
@@ -42,6 +51,8 @@ export default function Explore() {
     }, []);
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>{error}</div>
+
+    console.log('plans:', plans)
 
     return (
         <div className={`py-2 transition-all ${isSidebarOpen ? "sm:ml-64" : "sm:ml-16"}`}>
