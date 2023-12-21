@@ -11,7 +11,8 @@
     "prisma:push": "dotenv -e .env.local -- npx prisma db push",
     "prisma:seed": "npx dotenv -e .env.local prisma db seed",
     "prisma:studio": "npx dotenv -e .env.local prisma studio",
-    "prisma:migrate": "npx dotenv -e .env.local -- npx prisma migrate deploy"
+    "prisma:migrate": "npx dotenv -e .env.local -- npx prisma migrate deploy",
+    "openapi-typescript:generate": "npx openapi-typescript --input ./openapi/openapi.json --output ./lib/openapi/schema.d.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.16.2",
@@ -39,6 +40,7 @@
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
+    "openapi-typescript": "^6.7.3",
     "postcss": "^8.4.32",
     "prisma": "^4.16.2",
     "tailwindcss": "^3.3.6",
