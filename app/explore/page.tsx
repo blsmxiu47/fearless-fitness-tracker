@@ -26,8 +26,6 @@ export default function Explore() {
                         </label>
                     </li>
                 </ul>
-
-
             </div>
             <div className="mx-2 mt-4">
                 <h3>Exercises</h3>
