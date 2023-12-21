@@ -28,6 +28,12 @@
                                             "id": {
                                                 "type": "integer"
                                             },
+                                            "createdAt": {
+                                                "type": "string"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string"
+                                            },
                                             "email": {
                                                 "type": "string"
                                             },
@@ -35,12 +41,6 @@
                                                 "type": "string"
                                             },
                                             "firstName": {
-                                                "type": "string"
-                                            },
-                                            "createdAt": {
-                                                "type": "string"
-                                            },
-                                            "updatedAt": {
                                                 "type": "string"
                                             }
                                         }
@@ -68,17 +68,32 @@
                                             "id": {
                                                 "type": "integer"
                                             },
+                                            "createdAt": {
+                                                "type": "string"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string"
+                                            },
+                                            "userId": {
+                                                "type": "integer"
+                                            },
                                             "name": {
                                                 "type": "string"
                                             },
                                             "custom": {
                                                 "type": "boolean"
                                             },
-                                            "createdAt": {
+                                            "description": {
                                                 "type": "string"
                                             },
-                                            "updatedAt": {
+                                            "duration": {
                                                 "type": "string"
+                                            },
+                                            "frequency": {
+                                                "type": "string"
+                                            },
+                                            "tags": {
+                                                "type": "array"
                                             }
                                         }
                                     }
@@ -103,17 +118,32 @@
                                             "id": {
                                                 "type": "integer"
                                             },
+                                            "createdAt": {
+                                                "type": "string"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string"
+                                            },
+                                            "userId": {
+                                                "type": "integer"
+                                            },
                                             "name": {
                                                 "type": "string"
                                             },
                                             "custom": {
                                                 "type": "boolean"
                                             },
-                                            "createdAt": {
+                                            "description": {
                                                 "type": "string"
                                             },
-                                            "updatedAt": {
+                                            "duration": {
                                                 "type": "string"
+                                            },
+                                            "frequency": {
+                                                "type": "string"
+                                            },
+                                            "tags": {
+                                                "type": "array"
                                             }
                                         }
                                     }
