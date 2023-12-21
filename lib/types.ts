@@ -1,3 +1,26 @@
+export interface User {
+    id: string;
+    email: string;
+    firstName: string;
+    password: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface Plan {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: number;
+    name: string;
+    custom: boolean;
+    description?: string;
+    duration?: string;
+    frequency?: string;
+    tags?: string[];
+}
+
+
 export interface Workout {
     id: string;
     exercises: string[];
