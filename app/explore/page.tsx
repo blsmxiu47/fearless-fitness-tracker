@@ -4,20 +4,24 @@ import { useState, useEffect } from 'react'
 
 import '../../globals.css'
 import { useSidebar } from '../context/sidebar-provider'
-import ExploreCard from '../components/ExploreCard'
-import { Plan } from '../../lib/types'
+import PlanCard from '../components/PlanCard'
+import ExerciseCard from '../components/ExerciseCard'
+import RoutineCard from '../components/RoutineCard'
+import { plans, exercises, workouts, routines } from '@prisma/client'
 
 export default function Explore() {
     // TODO: checkboxes state for filtering content
-    const [plans, setPlans] = useState<Plan[]>([]);
+    const [plans, setPlans] = useState<plans[]>([]);
+    const [routines, setRoutines] = useState<routines[]>([]);
+    const [exercises, setExercises] = useState<exercises[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { isSidebarOpen } = useSidebar();
 
-    const fetchPlans = async () => {
+    const fetchEndpoint = async (ep: string) => {
         try {
             const res = await fetch(
-                '/api/plan',
+                '/api/' + ep,
                 {
                     method: 'GET',
                     headers: {
@@ -25,20 +29,18 @@ export default function Explore() {
                     },
                 }
             )
-            console.log('fetchPlans res:', res)
             if (!res.ok) throw new Error(res.statusText)
             return await res.json()
         } catch (error) {
-            console.error('fetchPlans error:', error)
+            console.error('fetch error:', error)
             throw error;
         }
     }
 
-    // GET /api/plans to get all plans and put them in the plans array
     useEffect(() => {
         const loadPlans = async () => {
             try {
-                const data = await fetchPlans();
+                const data = await fetchEndpoint('plan');
                 setPlans(data);
             } catch (err: any) {
                 setError(err.message);
@@ -49,10 +51,34 @@ export default function Explore() {
 
         loadPlans();
     }, []);
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>{error}</div>
+    useEffect(() => {
+        const loadRoutines = async () => {
+            try {
+                const data = await fetchEndpoint('routine');
+                setRoutines(data);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    console.log('plans:', plans)
+        loadRoutines();
+    }, []);
+    useEffect(() => {
+        const loadExercises = async () => {
+            try {
+                const data = await fetchEndpoint('exercise');
+                setExercises(data);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadExercises();
+    }, []);
 
     return (
         <div className={`py-2 transition-all ${isSidebarOpen ? "sm:ml-64" : "sm:ml-16"}`}>
@@ -77,42 +103,25 @@ export default function Explore() {
             <div className="mx-2 mt-4">
                 <h3>Plans</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {plans.map((plan: Plan) => (
-                        <ExploreCard title={plan.name} subtitle='to be removed' label='to be removed' link={`/plan/${plan.id}`} />
+                    {plans.map((plan: plans) => (
+                        <PlanCard title={plan.name} subtitle='to be removed' label='to be removed' link={`/plan/${plan.id}`} />
                     ))}
-                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
-                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
-                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
-                    <ExploreCard title={"Plan 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"}/>
-                </div>
-            </div>
-            <div className="mx-2 mt-4">
-                <h3>Exercises</h3>
-                <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Exercise 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                </div>
-            </div>
-            <div className="mx-2 mt-4">
-                <h3>Workouts</h3>
-                <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Workout 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
                 </div>
             </div>
             <div className="mx-2 mt-4">
                 <h3>Routines</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    <ExploreCard title={"Routine 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
-                    <ExploreCard title={"Routine 1"} subtitle={"etw etw etw"} label={"Beginner"} link={"#"} />
+                    {routines.map((routine: routines) => (
+                        <RoutineCard title={routine.name} subtitle='to be removed' label='to be removed' link={`/routine/${routine.id}`} />
+                    ))}
+                </div>
+            </div>
+            <div className="mx-2 mt-4">
+                <h3>Exercises</h3>
+                <div className="flex flex-wrap justify-center sm:justify-start p-2">
+                    {exercises.map((exercise: exercises) => (
+                        <ExerciseCard title={exercise.name} subtitle='to be removed' label='to be removed' link={`/exercise/${exercise.id}`} />
+                    ))}
                 </div>
             </div>
         </div>

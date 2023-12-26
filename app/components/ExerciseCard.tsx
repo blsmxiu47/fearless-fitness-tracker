@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function ExploreCard (fn: {
+export default function PlanCard (fn: {
     title: string,
     subtitle: string,
     label: string,

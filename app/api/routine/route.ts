@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '../../../lib/prisma'
 
-// GET /api/plan
+// GET /api/routine
 export async function GET(req: NextRequest) {
     try {
-        const plans = await prisma.plans.findMany({
+        const routines = await prisma.routines.findMany({
             select: {
                 id: true,
                 name: true
@@ -15,11 +15,11 @@ export async function GET(req: NextRequest) {
                 },
             ],
         })
-        return NextResponse.json(plans, { status: 200 })
+        return NextResponse.json(routines, { status: 200 })
     } catch (error) {
         console.error(error)
         return NextResponse.json(
-            { error: 'An error occurred handling request to get plans.' },
+            { error: 'An error occurred handling request to get routines.' },
             { status: 500 }
         )
     }
