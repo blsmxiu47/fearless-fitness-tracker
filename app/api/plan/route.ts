@@ -7,7 +7,11 @@ export async function GET(req: NextRequest) {
         const plans = await prisma.plans.findMany({
             select: {
                 id: true,
-                name: true
+                name: true,
+                description: true,
+                duration: true,
+                frequency: true,
+                tags: true,
             },
             orderBy: [
                 {
