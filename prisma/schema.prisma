@@ -49,14 +49,18 @@ model plan_days {
 }
 
 model plans {
-  id         Int         @id @default(autoincrement())
-  created_at DateTime    @db.Timestamp(6)
-  updated_at DateTime    @db.Timestamp(6)
-  user_id    Int?
-  name       String      @unique @db.VarChar(255)
-  custom     Boolean
-  plan_days  plan_days[]
-  users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          Int         @id @default(autoincrement())
+  created_at  DateTime    @db.Timestamp(6)
+  updated_at  DateTime    @db.Timestamp(6)
+  user_id     Int?
+  name        String      @unique @db.VarChar(30)
+  custom      Boolean
+  description String?     @db.VarChar(255)
+  duration    String?     @db.VarChar(255)
+  frequency   String?     @db.VarChar(255)
+  tags        String[]    @db.VarChar(255)
+  plan_days   plan_days[]
+  users       users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model routines {
