@@ -101,10 +101,10 @@ export default function Explore() {
                 </ul>
             </div>
             <div className="mx-2 mt-4">
-                <h3>Plans</h3>
+                <h3>Training Plans</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
                     {plans.map((plan: plans) => (
-                        <PlanCard title={plan.name} subtitle='to be removed' label='to be removed' link={`/plan/${plan.id}`} />
+                        <PlanCard title={plan.name} description={plan.description!} duration={plan.duration!} frequency={plan.frequency!} link={`/plan/${plan.id}`} tags={plan.tags} />
                     ))}
                 </div>
             </div>
