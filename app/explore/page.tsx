@@ -7,18 +7,23 @@ import { useSidebar } from '../context/sidebar-provider'
 import PlanCard from '../components/PlanCard'
 import ExerciseCard from '../components/ExerciseCard'
 import RoutineCard from '../components/RoutineCard'
-import { plans, exercises, workouts, routines } from '@prisma/client'
+import { plans, exercises, routines } from '@prisma/client'
 
 export default function Explore() {
-    // TODO: checkboxes state for filtering content
+    const [meChecked, setMeChecked] = useState(true);
+    const [communityChecked, setCommunityChecked] = useState(true);
+    const [plansData, setPlansData] = useState<plans[]>([]);
     const [plans, setPlans] = useState<plans[]>([]);
+    const [routinesData, setRoutinesData] = useState<routines[]>([]);
     const [routines, setRoutines] = useState<routines[]>([]);
+    const [exercisesData, setExercisesData] = useState<exercises[]>([]);
     const [exercises, setExercises] = useState<exercises[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { isSidebarOpen } = useSidebar();
 
-    const fetchEndpoint = async (ep: string) => {
+
+    const fetchEndpoint = async (ep: string, user = true, community = true) => {
         try {
             const res = await fetch(
                 '/api/' + ep,
@@ -40,8 +45,9 @@ export default function Explore() {
     useEffect(() => {
         const loadPlans = async () => {
             try {
-                const data = await fetchEndpoint('plan');
-                setPlans(data);
+                const plansData = await fetchEndpoint('plan');
+                setPlansData(plansData);
+                setPlans(plansData);
             } catch (err: any) {
                 setError(err.message);
             } finally {
@@ -51,11 +57,13 @@ export default function Explore() {
 
         loadPlans();
     }, []);
+    
     useEffect(() => {
         const loadRoutines = async () => {
             try {
-                const data = await fetchEndpoint('routine');
-                setRoutines(data);
+                const routinesData = await fetchEndpoint('routine');
+                setRoutinesData(routinesData);
+                setRoutines(routinesData);
             } catch (err: any) {
                 setError(err.message);
             } finally {
@@ -65,11 +73,13 @@ export default function Explore() {
 
         loadRoutines();
     }, []);
+
     useEffect(() => {
         const loadExercises = async () => {
             try {
-                const data = await fetchEndpoint('exercise');
-                setExercises(data);
+                const exercisesData = await fetchEndpoint('exercise');
+                setExercisesData(exercisesData);
+                setExercises(exercisesData);
             } catch (err: any) {
                 setError(err.message);
             } finally {
@@ -80,6 +90,42 @@ export default function Explore() {
         loadExercises();
     }, []);
 
+    const filterData = () => {
+        if (meChecked && communityChecked) {
+            setPlans(plansData);
+            setRoutines(routinesData);
+            setExercises(exercisesData);
+            return;
+        } else if (meChecked) {
+            setPlans(plansData.filter(plan => plan.user_id === 1));
+            setRoutines(routinesData.filter(routine => routine.user_id === 1));
+            setExercises(exercisesData.filter(exercise => exercise.user_id === 1));
+            return;
+        } else if (communityChecked) {
+            setPlans(plansData.filter(plan => plan.user_id !== 1));
+            setRoutines(routinesData.filter(routine => routine.user_id !== 1));
+            setExercises(exercisesData.filter(exercise => exercise.user_id !== 1));
+            return;
+        } else {
+            setPlans([]);
+            setRoutines([]);
+            setExercises([]);
+            return;
+        }
+    }
+
+    const handleMeToggle = () => {
+        setMeChecked(!meChecked);
+    }
+
+    const handleCommunityToggle = () => {
+        setCommunityChecked(!communityChecked);
+    }
+
+    useEffect(() => {
+        filterData();
+    }, [meChecked, communityChecked]);
+
     return (
         <div className={`py-2 transition-all ${isSidebarOpen ? "sm:ml-64" : "sm:ml-16"}`}>
             <h2>Explore</h2>
@@ -87,14 +133,14 @@ export default function Explore() {
                 <span className="pr-2">Created by:</span>
                 <ul className="inline-flex gap-2">
                     <li>
-                        <input checked type="checkbox" id="me-option" value="" className="hidden peer" />
-                        <label htmlFor="me-option" className="inline-flex justify-center px-4 p-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-red-200 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                        <input type="checkbox" id="me-option" value="me" className="hidden peer/me" checked={meChecked} onChange={handleMeToggle} />
+                        <label htmlFor="me-option" className="inline-flex justify-center px-4 p-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked/me:border-red-200 hover:text-gray-600 dark:peer-checked/me:text-gray-300 peer-checked/me:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                             <span>Me</span>
                         </label>
                     </li>
                     <li>
-                        <input checked type="checkbox" id="community-option" value="" className="hidden peer" />
-                        <label htmlFor="community-option" className="inline-flex justify-center px-4 py-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-red-200 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <input type="checkbox" id="community-option" value="community" className="hidden peer/community" checked={communityChecked} onChange={handleCommunityToggle} />
+                        <label htmlFor="community-option" className="inline-flex justify-center px-4 py-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked/community:border-red-200 hover:text-gray-600 dark:peer-checked/community:text-gray-300 peer-checked/community:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">
                             <span>Community</span>
                         </label>
                     </li>
