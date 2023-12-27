@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
         const exercises = await prisma.exercises.findMany({
             select: {
                 id: true,
+                user_id: true,
                 name: true
             },
             orderBy: [

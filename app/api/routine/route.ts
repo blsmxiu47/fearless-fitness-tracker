@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
         const routines = await prisma.routines.findMany({
             select: {
                 id: true,
+                user_id: true,
                 name: true
             },
             orderBy: [

@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
         const plans = await prisma.plans.findMany({
             select: {
                 id: true,
+                user_id: true,
                 name: true,
                 description: true,
                 duration: true,
