@@ -1,17 +1,12 @@
-'use client'
-
 import '../../globals.css'
 import Card from '../components/Card'
 import TimeRangeSelect from '../components/TimeRangeSelect'
 import TimeUnitSelect from '../components/TimeUnitSelect'
 import LinePlot from '../charts/LinePlot'
-import { useSidebar } from '../context/sidebar-provider'
 
 export default function Home () {
-    const { isSidebarOpen } = useSidebar();
-    
     return (
-        <div className={`py-2 transition-all ${isSidebarOpen ? "sm:ml-64" : "sm:ml-16"}`}>
+            <div>
                 <div className="flex flex-wrap justify-center p-2 gap-4">
                     <TimeRangeSelect />
                     <TimeUnitSelect />
