@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-
 import { PiClock, PiClockClockwiseLight } from "react-icons/pi";
 
 export default function PlanCard (fn: {
