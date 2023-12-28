@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 
 import '../../globals.css'
-import { useSidebar } from '../context/sidebar-provider'
 import PlanCard from '../components/PlanCard'
 import ExerciseCard from '../components/ExerciseCard'
 import RoutineCard from '../components/RoutineCard'
@@ -20,8 +19,6 @@ export default function Explore() {
     const [exercises, setExercises] = useState<exercises[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { isSidebarOpen } = useSidebar();
-
 
     const fetchEndpoint = async (ep: string, user = true, community = true) => {
         try {
@@ -127,7 +124,7 @@ export default function Explore() {
     }, [meChecked, communityChecked]);
 
     return (
-        <div className={`py-2 transition-all ${isSidebarOpen ? "sm:ml-64" : "sm:ml-16"}`}>
+        <div>
             <h2>Explore</h2>
             <div>
                 <span className="pr-2">Created by:</span>
@@ -149,8 +146,8 @@ export default function Explore() {
             <div className="mx-2 mt-4">
                 <h3>Training Plans</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {plans.map((plan: plans) => (
-                        <PlanCard title={plan.name} description={plan.description!} duration={plan.duration!} frequency={plan.frequency!} link={`/plan/${plan.id}`} tags={plan.tags} />
+                    {plans.map((plan: plans, i: number) => (
+                        <PlanCard key={i} title={plan.name} description={plan.description!} duration={plan.duration!} frequency={plan.frequency!} link={`/training-plans/${plan.id}`} tags={plan.tags} />
                     ))}
                 </div>
             </div>
@@ -171,6 +168,5 @@ export default function Explore() {
                 </div>
             </div>
         </div>
-
     )
 }
