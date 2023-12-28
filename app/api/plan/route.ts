@@ -13,6 +13,17 @@ export async function GET(req: NextRequest) {
                 duration: true,
                 frequency: true,
                 tags: true,
+                plan_days: {
+                    select: {
+                        id: true,
+                        week_number: true,
+                        day_number: true,
+                        description: true,
+                        session_a: true,
+                        session_b: true,
+                        total_distance: true,
+                    },
+                }
             },
             orderBy: [
                 {
