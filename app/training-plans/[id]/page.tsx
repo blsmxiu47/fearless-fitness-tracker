@@ -1,5 +1,6 @@
 import { plan_days, plans } from '@prisma/client';
 import '../../../globals.css'
+import PlanWeekTable from './PlanWeekTable';
 
 export async function generateStaticParams() {
     try {
@@ -111,36 +112,7 @@ export default async function TrainingPlan({ params }: { params: {
                     </tbody>
                 </table>
             </div> 
-            <div className="my-2">
-                <div className="flex bg-gray-800">
-                    <span className="px-4 py-3 text-md font-semibold">Week</span>
-                    <nav className="flex flex-wrap justify-center gap-2">
-                        {Object.keys(weeks).map((week: string, i: number) => (
-                            <button key={i} className="px-4 py-3 block text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 focus:outline-none border-b-2 font-medium border-purple-400">{week}</button>
-                        ))}
-                    </nav>
-                </div>
-                <table className="w-full">
-                    <thead>
-                        <tr className="text-md font-semibold text-left text-gray-700 dark:text-gray-700 bg-gray-100 border-b border-gray-600">
-                            <th className="px-4 py-3">Summary</th>
-                            <th className="px-4 py-3">Session 1</th>
-                            <th className="px-4 py-3">Session 2</th>
-                            <th className="px-4 py-3">Total Distance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {weeks[active_week].map((day: plan_days, i: number) => (
-                            <tr key={i}>
-                                <td className="px-4 py-3">{day.description}</td>
-                                <td className="px-4 py-3">{day.session_a}</td>
-                                <td className="px-4 py-3">{day.session_b}</td>
-                                <td className="px-4 py-3">{day.total_distance}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <PlanWeekTable weeks={weeks} />
         </div>
     )
 }
