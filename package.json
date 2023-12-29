@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint ./ --ext js,jsx,ts,tsx",
     "lint:fix": "eslint ./ --ext js,jsx,ts,tsx --fix",
-    "prisma:pull": "dotenv -e .env.local -- npx prisma db pull",
+    "prisma:pull": "rm -rf .next && dotenv -e .env.local -- npx prisma db pull",
     "prisma:push": "dotenv -e .env.local -- npx prisma db push",
     "prisma:generate": "npx dotenv -e .env.local prisma generate",
     "prisma:seed": "npx dotenv -e .env.local prisma db seed",
