@@ -62,6 +62,17 @@ export default async function TrainingPlan({ params }: { params: {
     }
     const res = await getPlan(params.id);
     const plan = res[0];
+    const weeks = plan.plan_days.reduce((acc: any, curr: any) => {
+        if (!acc[curr.week_number]) {
+            acc[curr.week_number] = [];
+        }
+        acc[curr.week_number].push(curr);
+        return acc;
+    }
+    , {});
+
+    var active_week = '1';
+    console.log(`weeks[${active_week}]`, weeks[active_week]);
 
     return (
         <div>
@@ -101,7 +112,14 @@ export default async function TrainingPlan({ params }: { params: {
                 </table>
             </div> 
             <div className="my-2">
-                {/* This is where the table-like calendar will go with tabs for weeks */}
+                <div className="flex bg-gray-800">
+                    <span className="px-4 py-3 text-md font-semibold">Week</span>
+                    <nav className="flex flex-wrap justify-center gap-2">
+                        {Object.keys(weeks).map((week: string, i: number) => (
+                            <button key={i} className="px-4 py-3 block text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700 focus:outline-none border-b-2 font-medium border-purple-400">{week}</button>
+                        ))}
+                    </nav>
+                </div>
                 <table className="w-full">
                     <thead>
                         <tr className="text-md font-semibold text-left text-gray-700 dark:text-gray-700 bg-gray-100 border-b border-gray-600">
@@ -112,7 +130,7 @@ export default async function TrainingPlan({ params }: { params: {
                         </tr>
                     </thead>
                     <tbody>
-                        {plan.plan_days.map((day: plan_days, i: number) => (
+                        {weeks[active_week].map((day: plan_days, i: number) => (
                             <tr key={i}>
                                 <td className="px-4 py-3">{day.description}</td>
                                 <td className="px-4 py-3">{day.session_a}</td>
