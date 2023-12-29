@@ -65,17 +65,63 @@ export default async function TrainingPlan({ params }: { params: {
 
     return (
         <div>
-            <h2>{plan.name}</h2>
-            <p>{plan.duration}</p>
-            <p>{plan.frequency}</p>
-            {/* tags */}
-            <div className="flex gap-2">
-                {plan.tags.map((tag: string, i: number) => (
-                    <span key={i} className="px-4 py-2 text-xs bg-gray-300 dark:bg-gray-700 rounded-lg">{tag}</span>
-                ))}
-            </div>
-            <div>
+            <h2 className="px-2 py-4 text-lg font-semibold">{plan.name} Training Plan</h2>
+            <div className="my-2">
+                <table className="my-2">
+                    <thead>
+                        <tr className="text-md font-semibold text-left text-gray-700 dark:text-gray-700 bg-gray-100 border-b border-gray-600">
+                            <th className="px-4 py-3">Plan Details</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="px-4 py-1">Duration</td>
+                            <td className="px-4 py-1">{plan.duration}</td>
+                        </tr>
+                        <tr>
+                            <td className="px-4 py-1">Frequency</td>
+                            <td className="px-4 py-1">{plan.frequency}</td>
+                        </tr>
+                        <tr>
+                            <td className="px-4 py-1">Tags</td>
+                            <td className="px-4 py-1">
+                                <div className="flex gap-2">
+                                    {plan.tags.map((tag: string, i: number) => (
+                                        <span key={i} className="px-4 py-2 text-xs bg-gray-300 dark:bg-gray-700 rounded-lg">{tag}</span>
+                                    ))}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="px-4 py-1">Description</td>
+                            <td className="px-4 py-1">{plan.description}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> 
+            <div className="my-2">
                 {/* This is where the table-like calendar will go with tabs for weeks */}
+                <table className="w-full">
+                    <thead>
+                        <tr className="text-md font-semibold text-left text-gray-700 dark:text-gray-700 bg-gray-100 border-b border-gray-600">
+                            <th className="px-4 py-3">Summary</th>
+                            <th className="px-4 py-3">Session 1</th>
+                            <th className="px-4 py-3">Session 2</th>
+                            <th className="px-4 py-3">Total Distance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {plan.plan_days.map((day: plan_days, i: number) => (
+                            <tr key={i}>
+                                <td className="px-4 py-3">{day.description}</td>
+                                <td className="px-4 py-3">{day.session_a}</td>
+                                <td className="px-4 py-3">{day.session_b}</td>
+                                <td className="px-4 py-3">{day.total_distance}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     )
