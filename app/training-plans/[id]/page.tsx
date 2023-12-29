@@ -72,9 +72,6 @@ export default async function TrainingPlan({ params }: { params: {
     }
     , {});
 
-    var active_week = '1';
-    console.log(`weeks[${active_week}]`, weeks[active_week]);
-
     return (
         <div>
             <h2 className="px-2 py-4 text-lg font-semibold">{plan.name} Training Plan</h2>
