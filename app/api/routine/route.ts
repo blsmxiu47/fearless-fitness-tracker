@@ -8,7 +8,9 @@ export async function GET(req: NextRequest) {
             select: {
                 id: true,
                 user_id: true,
-                name: true
+                name: true,
+                duration: true,
+                frequency: true,
             },
             orderBy: [
                 {
