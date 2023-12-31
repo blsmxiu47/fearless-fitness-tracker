@@ -8,18 +8,24 @@ datasource db {
 }
 
 model exercises {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @db.Timestamp(6)
-  updated_at DateTime @db.Timestamp(6)
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
   user_id    Int?
-  name       String   @unique @db.VarChar(255)
+  routine_id Int?
+  ordinal    Int?
+  name       String    @unique @db.VarChar(255)
+  sets       Int?
+  reps       Int?
+  weight     Int?
+  duration   Int?
   type_id    Int?
   custom     Boolean
   focus_id   Int?
   routines   Int[]
-  focuses    focuses? @relation(fields: [focus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  types      types?   @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users      users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  focuses    focuses?  @relation(fields: [focus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  types      types?    @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model focuses {
@@ -64,16 +70,15 @@ model plans {
 }
 
 model routines {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @db.Timestamp(6)
-  updated_at DateTime @db.Timestamp(6)
+  id         Int         @id @default(autoincrement())
+  created_at DateTime    @db.Timestamp(6)
+  updated_at DateTime    @db.Timestamp(6)
   user_id    Int?
-  name       String   @unique @db.VarChar(255)
+  name       String      @unique @db.VarChar(255)
   custom     Boolean
-  exercises  Int[]
-  duration   String?  @db.VarChar(255)
-  frequency  String?  @db.VarChar(255)
-  users      users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  duration   String?     @db.VarChar(255)
+  frequency  String?     @db.VarChar(255)
+  users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model shoes {
