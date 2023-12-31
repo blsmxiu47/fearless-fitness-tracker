@@ -16,11 +16,12 @@ model exercises {
   ordinal    Int?
   name       String    @unique @db.VarChar(255)
   sets       Int?
-  reps       Int?
-  weight     Int?
-  duration   Int?
+  reps       String?   @db.VarChar(255)
+  weight     String?   @db.VarChar(255)
+  duration   String?   @db.VarChar(255)
+  rest       String?   @db.VarChar(255)
+  notes      String?   @db.VarChar(255)
   type_id    Int?
-  custom     Boolean
   focus_id   Int?
   routines   Int[]
   focuses    focuses?  @relation(fields: [focus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -34,7 +35,6 @@ model focuses {
   updated_at DateTime    @db.Timestamp(6)
   user_id    Int?
   name       String      @unique @db.VarChar(255)
-  custom     Boolean
   exercises  exercises[]
   users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -49,8 +49,8 @@ model plan_days {
   description    String?  @db.VarChar(65535)
   session_a      String?  @db.VarChar(65535)
   session_b      String?  @db.VarChar(65535)
-  total_duration Int?
-  total_distance Int?
+  total_duration String?  @db.VarChar(255)
+  total_distance String?  @db.VarChar(255)
   plans          plans?   @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -60,7 +60,6 @@ model plans {
   updated_at  DateTime    @db.Timestamp(6)
   user_id     Int?
   name        String      @unique @db.VarChar(30)
-  custom      Boolean
   description String?     @db.VarChar(255)
   duration    String?     @db.VarChar(255)
   frequency   String?     @db.VarChar(255)
@@ -75,7 +74,6 @@ model routines {
   updated_at DateTime    @db.Timestamp(6)
   user_id    Int?
   name       String      @unique @db.VarChar(255)
-  custom     Boolean
   duration   String?     @db.VarChar(255)
   frequency  String?     @db.VarChar(255)
   users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -99,7 +97,6 @@ model types {
   updated_at DateTime    @db.Timestamp(6)
   user_id    Int?
   name       String      @unique @db.VarChar(255)
-  custom     Boolean
   exercises  exercises[]
   users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
