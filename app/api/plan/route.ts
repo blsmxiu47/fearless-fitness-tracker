@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
                         description: true,
                         session_a: true,
                         session_b: true,
+                        total_duration: true,
                         total_distance: true,
                     },
                 }
