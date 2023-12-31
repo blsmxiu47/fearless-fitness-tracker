@@ -154,8 +154,8 @@ export default function Explore() {
             <div className="mx-2 mt-4">
                 <h3>Routines</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {routines.map((routine: routines) => (
-                        <RoutineCard title={routine.name} subtitle='to be removed' label='to be removed' link={`/routine/${routine.id}`} />
+                    {routines.map((routine: routines, i: number) => (
+                        <RoutineCard key={i} title={routine.name} duration={routine.duration!} link={`/routine/${routine.id}`} />
                     ))}
                 </div>
             </div>
