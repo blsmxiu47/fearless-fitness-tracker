@@ -22,12 +22,13 @@ export default function PlanCard (fn: {
                             <span className="text-sm font-semibold">{fn.title}</span>
                         </div>
                         <div className="flex gap-2">
-                            <div>
-                                <span className="text-xs text-gray-500"><PiClock className="inline-block text-gray-500" /> {fn.duration}</span>
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                                <PiClock className="inline-block" />
+                                <span>{fn.duration}</span>
                             </div>
-                            <div>
-                                <PiClockClockwiseLight className="inline-block text-gray-500" />
-                                <span className="text-xs text-gray-500"> {fn.frequency}</span>
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                                <PiClockClockwiseLight className="inline-block" />
+                                <span>{fn.frequency}</span>
                             </div>
                         </div>
                         <div className="p-2">
