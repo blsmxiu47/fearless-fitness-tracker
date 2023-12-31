@@ -11,6 +11,7 @@
 * implement structure and basic functionality for the following pages
   * Explore
   * Build Routine
+    * Include preview of routine as it is being built
   * Preferences
   * Profile
   * Account Settings
