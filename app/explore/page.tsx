@@ -162,8 +162,8 @@ export default function Explore() {
             <div className="mx-2 mt-4">
                 <h3>Exercises</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {exercises.map((exercise: exercises) => (
-                        <ExerciseCard title={exercise.name} subtitle='to be removed' label='to be removed' link={`/exercise/${exercise.id}`} />
+                    {exercises.map((exercise: exercises, i: number) => (
+                        <ExerciseCard key={i} title={exercise.name} type={exercise.type} focus={exercise.focus} link={`/exercise/${exercise.id}`} />
                     ))}
                 </div>
             </div>

@@ -1,22 +1,29 @@
 import Link from 'next/link'
 
-export default function PlanCard (fn: {
+export default function ExerciseCard (fn: {
     title: string,
-    subtitle: string,
-    label: string,
+    type: string,
+    focus: string,
     link: string
 }) {
     return (
         <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-[240px]">
             <Link href={fn.link}>
-                <div className="relative flex h-40 bg-white dark:bg-gray-800 justify-center p-2 m-2 overflow-hidden rounded-lg">
-                    <div className="absolute top-0 right-0 bg-red-200 text-white text-xs px-2 py-1 rounded-bl-lg">
-                        {fn.label}
+                <div className="group relative flex h-24 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 justify-center p-2 m-2 overflow-auto rounded-lg">
+                    <div className="absolute top-0 right-0 bg-blue-400 text-white text-xs px-2 py-1 rounded-bl-lg group-hover:bg-blue-300">
+                        <span>Exercise</span>
                     </div>
-                    <div className="flex flex-col items-center pt-4">
-                        <span className="text-md font-semibold">{fn.title}</span>
-                        <div className="">
-                            <span className="text-sm text-gray-500">{fn.subtitle}</span>
+                    <div className="flex flex-col items-center px-2 pt-4 pb-2">
+                        <div className="text-center">
+                            <span className="text-sm font-semibold text-center">{fn.title}</span>
+                        </div>
+                        <div className="flex gap-2">
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                                <span>{fn.type}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                                <span>{fn.focus}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
