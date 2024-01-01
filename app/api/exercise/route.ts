@@ -5,10 +5,9 @@ import prisma from '../../../lib/prisma'
 export async function GET(req: NextRequest) {
     try {
         const exercises = await prisma.exercises.findMany({
-            select: {
-                id: true,
-                user_id: true,
-                name: true
+            include: {
+                types: true,
+                focuses: true,
             },
             orderBy: [
                 {
@@ -16,6 +15,7 @@ export async function GET(req: NextRequest) {
                 },
             ],
         })
+
         return NextResponse.json(exercises, { status: 200 })
     } catch (error) {
         console.error(error)
