@@ -22,6 +22,7 @@
 * publish and make repo public
 ...
 * ...add a non-main branch and continue adding features and improving the (now-published) app as time permits
+  * "Running" view with input table including fields for session a, b, other a, other b, distance, time, elevation gain, zones 1-5, TI (calculated), weekly sums, moving average fields, etc.
 
 ### Views
 
