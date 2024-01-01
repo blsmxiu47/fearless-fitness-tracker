@@ -6,7 +6,8 @@ import '../../globals.css'
 import PlanCard from '../components/PlanCard'
 import ExerciseCard from '../components/ExerciseCard'
 import RoutineCard from '../components/RoutineCard'
-import { plans, exercises, routines } from '@prisma/client'
+import { plans, routines } from '@prisma/client'
+import { Exercise as exercise } from '../../lib/types'
 
 export default function Explore() {
     const [meChecked, setMeChecked] = useState(true);
@@ -15,8 +16,8 @@ export default function Explore() {
     const [plans, setPlans] = useState<plans[]>([]);
     const [routinesData, setRoutinesData] = useState<routines[]>([]);
     const [routines, setRoutines] = useState<routines[]>([]);
-    const [exercisesData, setExercisesData] = useState<exercises[]>([]);
-    const [exercises, setExercises] = useState<exercises[]>([]);
+    const [exercisesData, setExercisesData] = useState<exercise[]>([]);
+    const [exercises, setExercises] = useState<exercise[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -146,24 +147,24 @@ export default function Explore() {
             <div className="mx-2 mt-4">
                 <h3>Training Plans</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {plans.map((plan: plans, i: number) => (
-                        <PlanCard key={i} title={plan.name} description={plan.description!} duration={plan.duration!} frequency={plan.frequency!} link={`/training-plans/${plan.id}`} tags={plan.tags} />
+                    {plans.map((plan: plans) => (
+                        <PlanCard key={plan.id} title={plan.name} description={plan.description!} duration={plan.duration!} frequency={plan.frequency!} link={`/training-plans/${plan.id}`} tags={plan.tags} />
                     ))}
                 </div>
             </div>
             <div className="mx-2 mt-4">
                 <h3>Routines</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {routines.map((routine: routines, i: number) => (
-                        <RoutineCard key={i} title={routine.name} duration={routine.duration!} link={`/routine/${routine.id}`} />
+                    {routines.map((routine: routines) => (
+                        <RoutineCard key={routine.id} title={routine.name} duration={routine.duration!} link={`/routine/${routine.id}`} />
                     ))}
                 </div>
             </div>
             <div className="mx-2 mt-4">
                 <h3>Exercises</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
-                    {exercises.map((exercise: exercises, i: number) => (
-                        <ExerciseCard key={i} title={exercise.name} type={exercise.type} focus={exercise.focus} link={`/exercise/${exercise.id}`} />
+                    {exercises.map((exercise: exercise) => (
+                        <ExerciseCard key={exercise.id} title={exercise.name} type={exercise.type?.name} focus={exercise.focus?.name} link={`/exercise/${exercise.id}`} />
                     ))}
                 </div>
             </div>
