@@ -13,12 +13,12 @@ export default function ExerciseDetailCard (fn: {
     link: string
 }) {
     return (
-        <div className="w-full lg:w-1/2">
+        <div className="relative z-10 w-full lg:w-1/2">
             <Link href={fn.link}>
-                <div className="relative top-0 right-0 p-2">
-                    <span className="px-2 py-1 text-xs font-bold text-white bg-gray-800 rounded">{fn.ordinal}</span>
+                <div className="absolute z-15 top-0 right-0 px-2 py-4">
+                    <span className="px-4 text-4xl dark:text-white opacity-20">{fn.ordinal}</span>
                 </div>
-                <div className="group relative flex bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 m-2 overflow-auto rounded-lg">
+                <div className="flex p-2 m-2 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                     <div className="flex items-center px-2 pt-4 pb-2">
                         <div>
                             <span className="text-sm font-semibold">{fn.title}</span>
