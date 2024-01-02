@@ -10,6 +10,8 @@
   * potentially combine dashboard and my stats for the time being/creating MVP
 * implement structure and basic functionality for the following pages
   * Explore
+    * Implement pagination for each section
+    * Implement search functionality and additional filters (e.g. by tags) for each section as applicable
   * Build Routine
     * Include preview of routine as it is being built
   * Preferences
