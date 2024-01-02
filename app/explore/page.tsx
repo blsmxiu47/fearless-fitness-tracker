@@ -156,7 +156,7 @@ export default function Explore() {
                 <h3>Routines</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
                     {routines.map((routine: routines) => (
-                        <RoutineCard key={routine.id} title={routine.name} duration={routine.duration!} link={`/routine/${routine.id}`} />
+                        <RoutineCard key={routine.id} title={routine.name} duration={routine.duration!} link={`/routines/${routine.id}`} />
                     ))}
                 </div>
             </div>
@@ -164,7 +164,7 @@ export default function Explore() {
                 <h3>Exercises</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
                     {exercises.map((exercise: exercise) => (
-                        <ExerciseCard key={exercise.id} title={exercise.name} type={exercise.type?.name} focus={exercise.focus?.name} link={`/exercise/${exercise.id}`} />
+                        <ExerciseCard key={exercise.id} title={exercise.name} type={exercise.type?.name} focus={exercise.focus?.name} link={`/exercises/${exercise.id}`} />
                     ))}
                 </div>
             </div>
