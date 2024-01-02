@@ -13,14 +13,31 @@ export interface Focus {
 export interface ExerciseTmp {
     id: number
     user_id: number
+    routine_id: number
+    ordinal: number
     name: string
+    sets: number
+    reps: number
+    duration: string
+    weight: string
+    rest: string
+    notes: string
     types: Type[]
     focuses: Focus[]
 }
 export interface Exercise {
     id: number
     user_id: number
+    routine_id: number
+    ordinal: number
     name: string
+    sets: number
+    reps: number
+    duration: string
+    weight: string
+    rest: string
+    notes: string
     type: Type
     focus: Focus
+
 }
