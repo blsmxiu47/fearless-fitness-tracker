@@ -2,6 +2,14 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+:root {
+  --primary: #ED474A;
+  --secondary: #AF5D63;
+  --accent-1: #9C539C;
+  --accent-2: #C967A2;
+  --accent-3: #D876A9;
+}
+
 .form-select {
     background: url("public/images/down-arrow.svg") #fff no-repeat right .75rem center;
     background-size: 15px;

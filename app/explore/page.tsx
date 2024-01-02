@@ -132,13 +132,13 @@ export default function Explore() {
                 <ul className="inline-flex gap-2">
                     <li>
                         <input type="checkbox" id="me-option" value="me" className="hidden peer/me" checked={meChecked} onChange={handleMeToggle} />
-                        <label htmlFor="me-option" className="inline-flex justify-center px-4 p-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked/me:border-red-200 hover:text-gray-600 dark:peer-checked/me:text-gray-300 peer-checked/me:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                        <label htmlFor="me-option" className="inline-flex justify-center px-4 p-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked/me:border-[var(--accent-3)] hover:text-gray-600 dark:peer-checked/me:text-gray-300 peer-checked/me:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                             <span>Me</span>
                         </label>
                     </li>
                     <li>
                         <input type="checkbox" id="community-option" value="community" className="hidden peer/community" checked={communityChecked} onChange={handleCommunityToggle} />
-                        <label htmlFor="community-option" className="inline-flex justify-center px-4 py-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked/community:border-red-200 hover:text-gray-600 dark:peer-checked/community:text-gray-300 peer-checked/community:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <label htmlFor="community-option" className="inline-flex justify-center px-4 py-1 cursor-pointer border-2 border-gray-200 rounded-full dark:hover:text-gray-300 dark:border-gray-700 peer-checked/community:border-[var(--accent-3)] hover:text-gray-600 dark:peer-checked/community:text-gray-300 peer-checked/community:text-gray-600 hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700">
                             <span>Community</span>
                         </label>
                     </li>
