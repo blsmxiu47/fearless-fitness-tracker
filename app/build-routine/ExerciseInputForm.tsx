@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import handle from '../api/user';
 
 export default function ExerciseInputForm () {
     const measureTypes = ['Reps', 'Duration'];
