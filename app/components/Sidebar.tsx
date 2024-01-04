@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { GoGear } from 'react-icons/go'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
@@ -10,8 +10,22 @@ import { MdLogout, MdOutlineSpaceDashboard, MdOutlineStackedLineChart, MdOutline
 import { useSidebar } from '../context/sidebar-provider'
 
 export default function Sidebar() {
-    const { isSidebarOpen, toggleSidebar } = useSidebar()
-    const [userMenu, setUserMenu] = useState(false)
+    const { isSidebarOpen, toggleSidebar } = useSidebar();
+    const [userMenu, setUserMenu] = useState(false);
+    const userMenuRef = useRef<HTMLDivElement>(null);
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (userMenu && userMenuRef.current && !userMenuRef.current?.contains(e.target as Node)) {
+            setUserMenu(false);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, [userMenu]);
 
     return (
         <>
@@ -38,7 +52,7 @@ export default function Sidebar() {
                                     <img className="w-8 h-8 rounded-full" src="https://placeholder.pics/svg/300" alt="user photo" />
                                 </button>
                             </div>
-                            <div className={`z-50 absolute origin-top-right right-0 top-10 my-4 px-2 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 ${userMenu ? "" : "hidden"}`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
+                            <div ref={userMenuRef} className={`z-50 absolute origin-top-right right-0 top-10 my-4 px-2 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 ${userMenu ? "" : "hidden"}`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
                                 <div className="px-4 py-3" role="none">
                                     <p className="text-sm text-gray-900 dark:text-white" role="none">
                                         userName from DB
@@ -49,18 +63,18 @@ export default function Sidebar() {
                                 </div>
                                 <ul className="py-1" role="none">
                                     <li>
-                                        <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-0">
+                                        <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-0" onClick={() => setUserMenu(false)}>
                                             <span className="flex items-center"><LuUser2 className="mr-1" />View Profile</span>
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/account-settings" className="inline-block align-middle px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-1">
+                                        <Link href="/account-settings" className="inline-block align-middle px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-1" onClick={() => setUserMenu(false)}>
                                             <span className="flex items-center"><GoGear className="mr-1" />Account Settings</span>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-3">
+                                        <Link href="/logout" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-3" onClick={() => setUserMenu(false)}>
                                             <span className="flex items-center"><MdLogout className="mr-1" />Sign Out</span>
                                         </Link>
                                     </li>
