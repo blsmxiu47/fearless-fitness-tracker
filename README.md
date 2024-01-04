@@ -14,9 +14,8 @@
     * Implement search functionality and additional filters (e.g. by tags) for each section as applicable
   * Build Routine
     * Include preview of routine as it is being built
-  * Preferences
   * Profile
-  * Account Settings
+  * Account Settings/Preferences
 * implement user authentication
 * clean up styles, etc. of the above pages
 * host DB and app.. somewhere.. tbd.. for no cost plz
