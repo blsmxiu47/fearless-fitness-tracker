@@ -3,11 +3,17 @@
 @import 'tailwindcss/utilities';
 
 :root {
-  --primary: #ED474A;
-  --secondary: #AF5D63;
-  --accent-1: #9C539C;
-  --accent-2: #FFAD84;
-  --accent-3: #D876A9;
+  /* --primary: #ED474A; */
+  --primary: #A80938;
+  --primary-light: #EA5f66;
+  --primary-dark: #82072C;
+  /* --secondary: #AF5D63; */
+  /* --accent-1: #9C539C; */
+  --accent-1: #B87276;
+  /* --accent-2: #FFAD84; */
+  --accent-2: #ffb9bb;
+  /* --accent-3: #D876A9; */
+  --accent-3: #5ABAB7;
 }
 
 .form-select {
