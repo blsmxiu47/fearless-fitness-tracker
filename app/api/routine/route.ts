@@ -27,3 +27,15 @@ export async function GET(req: NextRequest) {
         )
     }
 }
+
+// POST /api/routine
+export async function POST(req: NextRequest) {
+    // TODO: replace localhost
+    const res = await fetch('http://localhost:3000/api/routine', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(req.body),
+    })
+}
