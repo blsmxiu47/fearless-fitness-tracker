@@ -1,10 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { addExercise } from '../actions/addExercise'
 
 export default function ExerciseInputForm () {
     const measureTypes = ['Reps', 'Duration'];
     const [measureType, setMeasureType] = useState(measureTypes[0]);
+    const ref = useRef<HTMLFormElement>(null);
 
     const handleMeasureTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setMeasureType(e.target.value);
@@ -20,7 +22,16 @@ export default function ExerciseInputForm () {
     }
 
     return (
-        <form id="exercise-form" className="flex flex-col mx-2 p-4 max-w-[768px] border rounded-md text-xs sm:text-sm md:text-md" onSubmit={handleSaveExercise} >
+        <form
+            id="exercise-form"
+            ref={ref}
+            // TODO
+            action={async (formData: FormData) => {
+                ref.current?.reset();
+                await addExercise(formData);
+            }}
+            className="flex flex-col mx-2 p-4 max-w-[768px] border rounded-md text-xs sm:text-sm md:text-md" onSubmit={handleSaveExercise}
+        >
             <h4 className="text-sm font-semibold">Add an Exercise</h4>
             <div className="flex items-center gap-2 my-2">
                 <label className="w-32" htmlFor="exercise-name">Exercise Name</label>
@@ -50,6 +61,7 @@ export default function ExerciseInputForm () {
                 <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="exercise-rest" id="exercise-rest" placeholder={"e.g. \"30 seconds\""} />
             </div>
             <div className="flex items-center gap-2 my-2">
+                {/*TODO: Type/focus will be a search/dropdown and users must choose existing type/focus or create a new type/focus before adding it the exercise*/}
                 <label className="w-32" htmlFor="exercise-type">Type</label>
                 <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="exercise-type" id="exercise-type" placeholder={"e.g. \"Core\""} />
             </div>
