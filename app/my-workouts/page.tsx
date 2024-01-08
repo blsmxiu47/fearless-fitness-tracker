@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { LuImport } from 'react-icons/lu'
 
+import MyWorkoutsTable from './MyWorkoutsTable'
 import '../../globals.css'
 
 export default function MyWorkouts() {
+
     return (
         <div>
             <div className="mx-2 my-4 flex flex-col sm:flex-row sm:flex-wrap justify-between sm:items-center">
@@ -34,8 +36,8 @@ export default function MyWorkouts() {
                 </div>
             </div>
             <div>
-                table of results from prisma, with pagination. Sorting control as part of table header row.
-                {/* <MyWorkoutsTable /> */}
+                {/* table of results from prisma, with pagination. Sorting control as part of table header row. */}
+                <MyWorkoutsTable />
             </div>
         </div>
     )
