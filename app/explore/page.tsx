@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 
-import '../../globals.css'
+import { fetchEndpoint } from '../../utils/fetchEndpoint'
 import PlanCard from '../components/PlanCard'
 import ExerciseCard from '../components/ExerciseCard'
 import RoutineCard from '../components/RoutineCard'
 import { plans, routines } from '@prisma/client'
 import { Exercise as exercise } from '../../lib/types'
+import '../../globals.css'
 
 export default function Explore() {
     const [meChecked, setMeChecked] = useState(true);
@@ -21,25 +22,7 @@ export default function Explore() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const fetchEndpoint = async (ep: string, user = true, community = true) => {
-        try {
-            const res = await fetch(
-                '/api/' + ep,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                }
-            )
-            if (!res.ok) throw new Error(res.statusText)
-            return await res.json()
-        } catch (error) {
-            console.error('fetch error:', error)
-            throw error;
-        }
-    }
-
+    
     useEffect(() => {
         const loadPlans = async () => {
             try {
@@ -164,7 +147,7 @@ export default function Explore() {
                 <h3>Exercises</h3>
                 <div className="flex flex-wrap justify-center sm:justify-start p-2">
                     {exercises.map((exercise: exercise) => (
-                        <ExerciseCard key={exercise.id} title={exercise.name} type={exercise.type?.name} focus={exercise.focus?.name} link={`/exercises/${exercise.id}`} />
+                        <ExerciseCard key={exercise.id} title={exercise.name} focus={exercise.focus?.name} link={`/exercises/${exercise.id}`} />
                     ))}
                 </div>
             </div>
