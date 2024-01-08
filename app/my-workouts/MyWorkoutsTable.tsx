@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 
 import { fetchEndpoint } from "../../utils/fetchEndpoint";
-import { workouts } from "@prisma/client";
+import { Workout } from "../../lib/types";
 
 export default function MyWorkoutsTable() {
-    const [workouts, setWorkouts] = useState<workouts[]>([]);
+    const [workouts, setWorkouts] = useState<Workout[]>([]);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
