@@ -8,7 +8,6 @@ export default function ExerciseDetailCard (fn: {
     duration: string,
     weight: string,
     rest: string,
-    type: string,
     focus: string,
     link: string
 }) {
@@ -28,13 +27,8 @@ export default function ExerciseDetailCard (fn: {
                                 <p className="text-xs text-gray-800 dark:text-gray-300">{fn.rest}</p>
                             }
                         </div>
-                        <div className="flex gap-2">
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
-                                <span>{fn.type}</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
-                                <span>{fn.focus}</span>
-                            </div>
+                        <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <span>{fn.focus}</span>
                         </div>
                     </div>
                 </div>

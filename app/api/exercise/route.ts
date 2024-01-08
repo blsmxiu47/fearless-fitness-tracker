@@ -6,7 +6,6 @@ export async function GET(req: NextRequest) {
     try {
         const exercises = await prisma.exercises.findMany({
             include: {
-                types: true,
                 focuses: true,
             },
             orderBy: [

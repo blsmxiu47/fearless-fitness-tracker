@@ -2,7 +2,6 @@ import Link from 'next/link'
 
 export default function ExerciseCard (fn: {
     title: string,
-    type: string,
     focus: string,
     link: string
 }) {
@@ -16,13 +15,8 @@ export default function ExerciseCard (fn: {
                     <div className="text-center">
                         <span className="text-sm font-semibold text-center">{fn.title}</span>
                     </div>
-                    <div className="flex gap-2">
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
-                            <span>{fn.type}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
-                            <span>{fn.focus}</span>
-                        </div>
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <span>{fn.focus}</span>
                     </div>
                 </div>
             </Link>

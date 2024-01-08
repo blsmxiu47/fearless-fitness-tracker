@@ -94,10 +94,6 @@ export default async function Exercise({ params }: { params: {
                             <td className="px-4 py-1">{exercise.name}</td>
                         </tr>
                         <tr>
-                            <td className="px-4 py-1">Type</td>
-                            <td className="px-4 py-1">{exercise.type}</td>
-                        </tr>
-                        <tr>
                             <td className="px-4 py-1">Focus</td>
                             <td className="px-4 py-1">{exercise.focus}</td>
                         </tr>

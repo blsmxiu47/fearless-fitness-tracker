@@ -61,11 +61,7 @@ export default function ExerciseInputForm () {
                 <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="exercise-rest" id="exercise-rest" placeholder={"e.g. \"30 seconds\""} />
             </div>
             <div className="flex items-center gap-2 my-2">
-                {/*TODO: Type/focus will be a search/dropdown and users must choose existing type/focus or create a new type/focus before adding it the exercise*/}
-                <label className="w-32" htmlFor="exercise-type">Type</label>
-                <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="exercise-type" id="exercise-type" placeholder={"e.g. \"Core\""} />
-            </div>
-            <div className="flex items-center gap-2 my-2">
+                {/*TODO: focus will be a search/dropdown and users must choose existing focus or create a new focus before adding it the exercise*/}
                 <label className="w-32" htmlFor="exercise-focus">Focus</label>
                 <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="exercise-focus" id="exercise-focus" placeholder={"e.g. \"Stability\""} />
             </div>
