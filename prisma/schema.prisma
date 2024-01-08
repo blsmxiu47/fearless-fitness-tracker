@@ -21,11 +21,9 @@ model exercises {
   duration   String?   @db.VarChar(255)
   rest       String?   @db.VarChar(255)
   notes      String?   @db.VarChar(255)
-  type_id    Int?
   focus_id   Int?
-  routines   Int[]
   focuses    focuses?  @relation(fields: [focus_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  types      types?    @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  routines   routines? @relation(fields: [routine_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -74,8 +72,11 @@ model routines {
   updated_at DateTime    @db.Timestamp(6)
   user_id    Int?
   name       String      @unique @db.VarChar(255)
+  type_id    Int?
   duration   String?     @db.VarChar(255)
   frequency  String?     @db.VarChar(255)
+  exercises  exercises[]
+  types      types?      @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -92,13 +93,14 @@ model shoes {
 }
 
 model types {
-  id         Int         @id @default(autoincrement())
-  created_at DateTime    @db.Timestamp(6)
-  updated_at DateTime    @db.Timestamp(6)
+  id         Int        @id @default(autoincrement())
+  created_at DateTime   @db.Timestamp(6)
+  updated_at DateTime   @db.Timestamp(6)
   user_id    Int?
-  name       String      @unique @db.VarChar(255)
-  exercises  exercises[]
-  users      users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  name       String     @unique @db.VarChar(255)
+  routines   routines[]
+  users      users?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  workouts   workouts[]
 }
 
 model users {
@@ -121,6 +123,7 @@ model workouts {
   created_at            DateTime  @db.Timestamp(6)
   updated_at            DateTime  @db.Timestamp(6)
   user_id               Int?
+  type_id               Int?
   exercises             Int[]
   datetime              DateTime? @db.Timestamp(6)
   title                 String?   @db.VarChar(255)
@@ -142,5 +145,6 @@ model workouts {
   average_stride_length Float?
   min_elevation         Int?
   max_elevation         Int?
+  types                 types?    @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                 users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

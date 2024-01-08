@@ -22,7 +22,6 @@ export interface ExerciseTmp {
     weight: string
     rest: string
     notes: string
-    types: Type[]
     focuses: Focus[]
 }
 export interface Exercise {
@@ -37,7 +36,6 @@ export interface Exercise {
     weight: string
     rest: string
     notes: string
-    type: Type
     focus: Focus
 
 }
