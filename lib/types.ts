@@ -31,7 +31,7 @@ export interface Exercise {
     ordinal: number
     name: string
     sets: number
-    reps: number
+    reps: string
     duration: string
     weight: string
     rest: string
