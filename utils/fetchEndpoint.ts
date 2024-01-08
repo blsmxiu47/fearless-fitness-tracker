@@ -1,4 +1,4 @@
-export const fetchEndpoint = async (ep: string, user = true, community = true) => {
+export const fetchEndpoint = async (ep: string) => {
     try {
         const res = await fetch(
             '/api/' + ep,
