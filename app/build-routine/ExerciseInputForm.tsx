@@ -12,25 +12,24 @@ export default function ExerciseInputForm () {
         setMeasureType(e.target.value);
     }
 
-    const handleSaveExercise = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('save exercise');
-        const form = document.getElementById('exercise-form') as HTMLFormElement;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        console.log(data);
-    }
+    // const handleSaveExercise = (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     console.log('save exercise');
+    //     const form = document.getElementById('exercise-form') as HTMLFormElement;
+    //     const formData = new FormData(form);
+    //     const data = Object.fromEntries(formData.entries());
+    //     console.log(data);
+    // }
 
     return (
         <form
             id="exercise-form"
             ref={ref}
-            // TODO
             action={async (formData: FormData) => {
                 ref.current?.reset();
                 await addExercise(formData);
             }}
-            className="flex flex-col mx-2 p-4 max-w-[768px] border rounded-md text-xs sm:text-sm md:text-md" onSubmit={handleSaveExercise}
+            className="flex flex-col mx-2 p-4 max-w-[768px] border rounded-md text-xs sm:text-sm md:text-md"
         >
             <h4 className="text-sm font-semibold">Add an Exercise</h4>
             <div className="flex items-center gap-2 my-2">
