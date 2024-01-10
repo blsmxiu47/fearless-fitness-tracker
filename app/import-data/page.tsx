@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import '../../globals.css'
-import { getSignedUrl } from '../actions/getSignedUrl'
+import { getSignedURL } from '../actions/getSignedURL'
 
 export default function ImportData() {
     const [file, setFile] = useState<File | null>(null);
@@ -13,28 +13,41 @@ export default function ImportData() {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        setStatusMessage('Uploading file...');
         setLoading(true);
         console.log('file', file);
 
-        const signedUrlResult = await getSignedUrl();
-        console.log('signedUrlResult', signedUrlResult);
-        // if (signedUrlResult.failure !=== undefined) {
-        //     setStatusMessage('Error uploading file');
-        //     setLoading(false);
-        //     console.error('Error uploading file');
-        //     return;
-        // }
-        const signedUrl = signedUrlResult.success.url
+        try {
+            if (file) {
+                setStatusMessage('Uploading file...');
 
-        // const formData = new FormData();
-        // formData.append('file', file);
-        // const response = await fetch('/api/import-data', {
-        //     method: 'POST',
-        //     body: formData
-        // });
-        // const data = await response.json();
-        // console.log(data);
+                const signedUrlResult = await getSignedURL();
+                // if (signedUrlResult.failure !=== undefined) {
+                //     setStatusMessage('Error uploading file');
+                //     setLoading(false);
+                //     console.error('Error uploading file');
+                //     return;
+                // }
+                const signedUrl = signedUrlResult.success.url
+                
+                // TODO: rm
+                console.log('signedUrl', signedUrl);
+
+                await fetch(signedUrl, {
+                    method: 'PUT',
+                    body: file,
+                    headers: {
+                        'Content-Type': file.type
+                    }
+                });
+            } else {
+                setStatusMessage('No file selected');
+            }
+        } catch (err: any) {
+            setStatusMessage('Error uploading file');
+            console.error('Error uploading file');
+        } finally {
+            setLoading(false);
+        }
     }
 
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {

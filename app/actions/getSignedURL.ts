@@ -3,6 +3,7 @@
 // import { auth } from "@/auth";
 
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -12,7 +13,7 @@ const s3 = new S3Client({
     },
 });
 
-export async function getSignedUrl() {
+export async function getSignedURL() {
     // const session = await auth();
     // if (!session) {
     //     return { failure: "Not authenticated" };
@@ -24,5 +25,9 @@ export async function getSignedUrl() {
         ContentType: "text/csv",
     });
 
-    return { success: { url: "" } }
+    const signedUrl = await getSignedUrl(s3, putObjCmd, {
+        expiresIn: 60,
+    });
+
+    return { success: { url: signedUrl } }
 } 
