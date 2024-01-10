@@ -3,15 +3,30 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import '../../globals.css'
-import { useSidebar } from '../context/sidebar-provider'
+import { getSignedUrl } from '../actions/getSignedUrl'
 
 export default function ImportData() {
-    const { isSidebarOpen } = useSidebar();
     const [file, setFile] = useState<File | null>(null);
+    const [statusMessage, setStatusMessage] = useState('');
+    const [isLoading, setLoading] = useState(false);
 
-    async function handleOnSubmit(e: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        setStatusMessage('Uploading file...');
+        setLoading(true);
         console.log('file', file);
+
+        const signedUrlResult = await getSignedUrl();
+        console.log('signedUrlResult', signedUrlResult);
+        // if (signedUrlResult.failure !=== undefined) {
+        //     setStatusMessage('Error uploading file');
+        //     setLoading(false);
+        //     console.error('Error uploading file');
+        //     return;
+        // }
+        const signedUrl = signedUrlResult.success.url
+
         // const formData = new FormData();
         // formData.append('file', file);
         // const response = await fetch('/api/import-data', {
@@ -40,7 +55,7 @@ export default function ImportData() {
                     <li>tktk: <s>Garmin Activity Files (.tcx, .fit or .gpx format)</s></li>
                     <li>tktk: <s>Custom Excel/CSV Data (see <Link href="/faq">How to structure custom data files</Link>)</s></li>
                 </ul>
-                <form onSubmit={handleOnSubmit}>
+                <form onSubmit={handleSubmit}>
                     <input type="file" name="import-data" className="mt-4" onChange={handleOnChange}/>
                     <div className="mt-4">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
