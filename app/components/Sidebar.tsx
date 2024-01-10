@@ -89,39 +89,39 @@ export default function Sidebar() {
         <aside className={`fixed top-0 left-0 z-40 h-screen pt-20 bg-white border-r border-gray-200 duration-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700 ${isSidebarOpen ? "w-64" : "-left-10 sm:left-0 w-0 sm:w-16"}`} aria-label="Sidebar">
             <img src="https://placeholder.pics/svg/300" className={`hidden sm:block absolute z-50 cursor-pointer -right-3 top-16 w-7 border-grey-800 dark:border-grey-900 border-2 rounded-full  ${!isSidebarOpen && "rotate-180"}`} onClick={() => toggleSidebar()}
             />
-            <div className={`h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 ${isSidebarOpen ? "block" : "hidden sm:block"}`}>
-                <ul className="space-y-2 font-medium">
-                    <li>
+            <div className={`h-full mt-2 px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800 ${isSidebarOpen ? "block" : "hidden sm:block"}`}>
+                <ul className="font-medium">
+                    <li className="my-2">
                         <Link href="/dashboard" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <MdOutlineSpaceDashboard className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Dashboard</span>
                         </Link>
                     </li>
-                    <li>
+                    <li className="my-2">
                         <a href="/my-workouts" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <MdOutlineStackedLineChart className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>My Workouts</span>
                         </a>
                     </li>
-                    <li>
+                    <li className="my-2">
                         <a href="/calendar" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <MdOutlineCalendarMonth className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "translate-x-0": "-translate-x-full opacity-0"}`}>Calendar</span>
                         </a>
                     </li>
-                    <li>
+                    <li className="my-2">
                         <a href="/build-routine" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <LuHammer className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "translate-x-0": "-translate-x-full opacity-0"}`}>Build Routine</span>
                         </a>
                     </li>
-                    <li>
+                    <li className="my-2">
                         <a href="/explore" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <FaMagnifyingGlass className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Explore</span>
                         </a>
                     </li>
-                    <li>
+                    <li className="my-2">
                         <a href="/reports" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <HiOutlineDocumentReport className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "translate-x-0": "-translate-x-full opacity-0"}`}>Reports</span>
@@ -133,7 +133,7 @@ export default function Sidebar() {
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Preferences</span>
                         </a>
                     </li> */}
-                    <li>
+                    <li className="my-2">
                         <a href="/import-data" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]">
                             <LuImport className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Import Data</span>
