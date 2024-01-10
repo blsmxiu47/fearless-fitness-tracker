@@ -17,6 +17,8 @@
     "openapi-typescript:generate": "npx openapi-typescript --input ./openapi/openapi.json --output ./lib/openapi/schema.d.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.485.0",
+    "@aws-sdk/s3-request-presigner": "^3.485.0",
     "@prisma/client": "^4.16.2",
     "@types/react-big-calendar": "^1.6.3",
     "d3": "^7.8.5",
