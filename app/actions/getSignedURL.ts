@@ -13,7 +13,13 @@ const s3 = new S3Client({
     },
 });
 
-export async function getSignedURL() {
+const acceptedTypes = [
+    "text/csv"
+]
+
+const maxFileSize = 1024 * 1024 * 100; // 100MB
+
+export async function getSignedURL(type: string, size: number, checksum: string) {
     // const session = await auth();
     // if (!session) {
     //     return { failure: "Not authenticated" };
@@ -22,12 +28,26 @@ export async function getSignedURL() {
     const putObjCmd = new PutObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME as string,
         Key: "test",
-        ContentType: "text/csv",
+        ContentType: type,
+        ContentLength: size,
+        ChecksumSHA256: checksum,
+        Metadata: {
+            // userId: session.user.id.toString(),
+            userId: "1", // TODO: replace with above or similar
+        }
     });
+
+    if (!acceptedTypes.includes(type)) {
+        return { failure: "Invalid file type" };
+    }
+
+    if (size > maxFileSize) {
+        return { failure: "File too large" };
+    }
 
     const signedUrl = await getSignedUrl(s3, putObjCmd, {
         expiresIn: 60,
     });
-
+    
     return { success: { url: signedUrl } }
 } 
