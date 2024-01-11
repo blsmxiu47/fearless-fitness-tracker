@@ -16,6 +16,11 @@
     * Include preview of routine as it is being built
   * Profile
   * Account Settings/Preferences
+  * Import Data
+    * S3 bucket for file upload
+    * Lambda function triggered by file upload to validate, parse, and send data to DB
+    * RDS/postgres for storing user data
+    * Implement progress bar for upload(?)
 * implement user authentication
 * clean up styles, etc. of the above pages
 * host DB and app.. somewhere.. tbd.. for no cost plz
