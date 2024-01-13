@@ -34,11 +34,28 @@ export default function ExerciseInputForm () {
             <h4 className="text-sm font-semibold">Add an Exercise</h4>
             <div className="flex items-center gap-2 my-2">
                 <label className="w-32" htmlFor="exercise-name">Exercise Name</label>
-                <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="exercise-name" id="exercise-name" placeholder={"e.g. \"Plank\""} />
+                <input
+                    form="exercise-form"
+                    className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]"
+                    type="text"
+                    name="exercise-name"
+                    id="exercise-name"
+                    placeholder={"e.g. \"Plank\""}
+                    required
+                />
             </div>
             <div className="flex items-center gap-2 my-2">
                 <label className="w-32" htmlFor="exercise-sets">Sets</label>
-                <input form="exercise-form" className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="number" name="exercise-sets" id="exercise-sets" min="1" max="99" placeholder="2" />
+                <input
+                    form="exercise-form"
+                    className="w-full pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]"
+                    type="number"
+                    name="exercise-sets"
+                    id="exercise-sets"
+                    min="1"
+                    max="99"
+                    placeholder="2"
+                />
             </div>
             <div className="flex items-center gap-2 my-2">
                 <select form="exercise-form" className="w-32 py-2 overflow-hidden dark:bg-gray-800 rounded-sm focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" name="exercise-measure-type" id="exercise-measure-type" value={measureType} onChange={e => handleMeasureTypeChange(e)}>
