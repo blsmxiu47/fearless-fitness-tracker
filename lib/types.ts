@@ -39,6 +39,16 @@ export interface Exercise {
     focus: Focus
 }
 
+export interface Routine {
+    id: number
+    user_id: number
+    name: string
+    duration: string
+    frequency: string
+    type: Type
+    exercises: Exercise[]
+}
+
 export interface WorkoutTmp {
     id: number
     user_id: number
