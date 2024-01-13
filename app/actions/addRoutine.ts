@@ -47,4 +47,3 @@ export const addRoutine = async (formData: FormData) => {
 
     revalidatePath('/routines');
 };
-
