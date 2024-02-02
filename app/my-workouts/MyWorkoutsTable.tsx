@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 
 import { fetchEndpoint } from "../../utils/fetchEndpoint";
-import { Workout } from "../../lib/types";
+import { Workout, Exercise } from "../../lib/types";
 
 export default function MyWorkoutsTable() {
     const [workouts, setWorkouts] = useState<Workout[]>([]);
@@ -29,10 +29,10 @@ export default function MyWorkoutsTable() {
         <table>
             <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Duration</th>
+                    <th>Exercises</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,9 +41,16 @@ export default function MyWorkoutsTable() {
                 {
                     workouts.map((workout, i) => (
                         <tr key={i}>
-                            <td>{workout.datetime?.toDateString()}</td>
+                            <td>{workout.datetime?.toString()}</td>
                             <td>{workout.type?.name}</td>
                             <td>{workout.duration}</td>
+                            <td>
+                                <ul>
+                                    {workout.workout_exercises.map((e, i) => (
+                                        <li key={i}>{e.exercises.name}</li>
+                                    ))}
+                                </ul>
+                            </td>
                         </tr>
                     ))
                 }
