@@ -85,10 +85,12 @@ model shoes {
   created_at  DateTime @db.Timestamp(6)
   updated_at  DateTime @db.Timestamp(6)
   user_id     Int?
-  model       String?  @db.VarChar(255)
+  model       String?  @db.VarChar(50)
+  class       String?  @db.VarChar(20)
   description String?  @db.VarChar(255)
   rating      Int?
-  notes       String?  @db.VarChar(65535)
+  notes       String?  @db.VarChar(255)
+  runs        runs[]
   users       users?   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -113,23 +115,50 @@ model users {
   focuses    focuses[]
   plans      plans[]
   routines   routines[]
+  runs       runs[]
   shoes      shoes[]
   types      types[]
   workouts   workouts[]
 }
 
 model workouts {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @db.Timestamp(6)
+  updated_at DateTime  @db.Timestamp(6)
+  user_id    Int?
+  type_id    Int?
+  exercises  Int[]
+  datetime   DateTime? @db.Timestamp(6)
+  title      String?   @db.VarChar(255)
+  notes      String?   @db.VarChar(65535)
+  duration   Int?
+  types      types?    @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model runs {
   id                    Int       @id @default(autoincrement())
   created_at            DateTime  @db.Timestamp(6)
   updated_at            DateTime  @db.Timestamp(6)
   user_id               Int?
-  type_id               Int?
-  exercises             Int[]
   datetime              DateTime? @db.Timestamp(6)
-  title                 String?   @db.VarChar(255)
+  title                 String?   @db.VarChar(50)
+  cycle_id              Int?
+  week_number           Int?
+  week_label            String?   @db.VarChar(50)
+  shoe_id               Int?
+  hydropak              Boolean?
   notes                 String?   @db.VarChar(65535)
   duration              Int?
   distance              Int?
+  distance_unit         String?   @db.VarChar(20)
+  elevation_gain        Int?
+  elevation_gain_unit   String?   @db.VarChar(20)
+  ti_1                  Int?
+  ti_2                  Int?
+  ti_3                  Int?
+  ti_4                  Int?
+  ti_5                  Int?
   calories              Int?
   average_heart_rate    Int?
   max_heart_rate        Int?
@@ -145,6 +174,6 @@ model workouts {
   average_stride_length Float?
   min_elevation         Int?
   max_elevation         Int?
-  types                 types?    @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  shoes                 shoes?    @relation(fields: [shoe_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                 users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
