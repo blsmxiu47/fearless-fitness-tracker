@@ -43,13 +43,13 @@ export default function BuildRoutine() {
                 <div className="mx-2">
                     <h3 className="my-2">Summary</h3>
                     <div className="grid grid-cols-3 gap-x-2 gap-y-4 items-center m-2 mb-4 max-w-[768px] text-xs sm:text-sm md:text-md">
-                            <label htmlFor="routine-name">Routine Name</label>
+                            <label htmlFor="routine-name">Routine Name*</label>
                             <input form="routine-form" className="col-span-2 pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="routine-name" id="routine-name" placeholder={"e.g. \"Core A\""} required />
-                            <label htmlFor="routine-duration">Duration</label>
+                            <label htmlFor="routine-duration">Duration*</label>
                             <input form="routine-form" className="col-span-2 pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="routine-duration" id="routine-duration" placeholder={"e.g. \"30 minutes\""} required />
-                            <label htmlFor="routine-frequency">Frequency</label>
+                            <label htmlFor="routine-frequency">Frequency*</label>
                             <input form="routine-form" className="col-span-2 pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]" type="text" name="routine-frequency" id="routine-frequency" placeholder={"e.g. \"2 sessions per week\""} required />
-                            <label htmlFor="routine-type">Type</label>
+                            <label htmlFor="routine-type">Type*</label>
                             <select form="routine-form" className="col-span-2 px-2 py-2 dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)] border-r-8 border-transparent" name="routine-type" id="routine-type" required>
                                 {types.map((type: any) => (
                                     <option key={type.id} value={type.id}>{type.name}</option>

@@ -52,7 +52,7 @@ export default function ExerciseInputForm () {
         >
             <h4 className="text-sm font-semibold">Add an Exercise</h4>
             <div className="grid grid-cols-3 gap-x-2 gap-y-4 items-center m-2 mb-4 max-w-[768px] text-[0.6rem] sm:text-xs md:text-sm">
-                <label htmlFor="exercise-name">Exercise Name</label>
+                <label htmlFor="exercise-name">Exercise Name*</label>
                 <input
                     form="exercise-form"
                     className="col-span-2 pl-2 pr-6 py-2 overflow-hidden dark:bg-gray-800 rounded-md focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--accent-1)]"
