@@ -37,6 +37,7 @@ export default function MyWorkoutsTable() {
             </thead>
             <tbody>
                 {isLoading && <tr><td>Loading workouts...</td></tr>}
+                {workouts.length === 0 && !isLoading && <tr><td>No workouts found</td></tr>}
                 {
                     workouts.map((workout, i) => (
                         <tr key={i}>
