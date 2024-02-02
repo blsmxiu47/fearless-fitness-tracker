@@ -1,16 +1,4 @@
-export interface Type {
-    id: number
-    user_id: number
-    name: string
-}
-
-export interface Focus {
-    id: number
-    user_id: number
-    name: string
-}
-
-export interface ExerciseTmp {
+export type ExerciseTmp = {
     id: number
     user_id: number
     routine_id: number
@@ -24,7 +12,8 @@ export interface ExerciseTmp {
     notes: string
     focuses: Focus[]
 }
-export interface Exercise {
+
+export type Exercise = {
     id: number
     user_id: number
     routine_id: number
@@ -39,7 +28,39 @@ export interface Exercise {
     focus: Focus
 }
 
-export interface Routine {
+export type Focus = {
+    id: number
+    user_id: number
+    name: string
+}
+
+export type Plan = {
+    id: number
+    user_id: number
+    name: string
+    description: string
+    duration: string
+    frequency: string
+    tags: string[]
+    plan_days: PlanDay[]
+    users: User
+}
+
+export type PlanDay = {
+    id: number
+    user_id: number
+    plan_id: number
+    week_number: number
+    day_number: number
+    description: string
+    session_a: string
+    session_b: string
+    total_duration: string
+    total_distance: string
+    plan: Plan
+}
+
+export type Routine = {
     id: number
     user_id: number
     name: string
@@ -49,17 +70,27 @@ export interface Routine {
     exercises: Exercise[]
 }
 
-export interface WorkoutTmp {
+export type Run = {
     id: number
     user_id: number
-    type_id: number
-    types: Type[]
-    exercises: Exercise[]
-    datetime: Date
+    datetime: string
     title: string
+    cycle_id: number
+    week_number: number
+    week_label: string
+    shoe_id: number
+    hydropak: boolean
     notes: string
     duration: number
     distance: number
+    distance_unit: string
+    elevation_gain: number
+    elevation_gain_unit: string
+    ti_1: number
+    ti_2: number
+    ti_3: number
+    ti_4: number
+    ti_5: number
     calories: number
     average_heart_rate: number
     max_heart_rate: number
@@ -75,32 +106,58 @@ export interface WorkoutTmp {
     average_stride_length: number
     min_elevation: number
     max_elevation: number
+    shoes: Shoe
+    users: User
 }
 
-export interface Workout {
+export type Shoe = {
+    id: number
+    user_id: number
+    model: string
+    class: string
+    description: string
+    rating: number
+    notes: string
+    runs: Run[]
+    users: User
+}
+
+export type Type = {
+    id: number
+    user_id: number
+    name: string
+}
+
+export type User = {
+    id: number
+    email: string
+    first_name: string
+    exercises: Exercise[]
+    focuses: Focus[]
+    plans: Plan[]
+    routines: Routine[]
+    runs: Run[]
+    shoes: Shoe[]
+    types: Type[]
+    workouts: Workout[]
+}
+ 
+export type WorkoutExercise = {
+    workout_id: number
+    exercise_id: number
+    exercises: Exercise
+    workouts: Workout
+}
+
+export type Workout = {
     id: number
     user_id: number
     type_id: number
-    type: Type
-    exercises: Exercise[]
-    datetime: Date
+    workout_exercises: WorkoutExercise[]
+    datetime: string
     title: string
     notes: string
     duration: number
-    distance: number
-    calories: number
-    average_heart_rate: number
-    max_heart_rate: number
-    average_run_cadence: number
-    max_run_cadence: number
-    average_pace: number
-    best_pace: number
-    average_lap_time: number
-    best_lap_time: number
-    number_of_laps: number
-    total_ascent: number
-    total_descent: number
-    average_stride_length: number
-    min_elevation: number
-    max_elevation: number
+    type: Type
+    user: User
 }
