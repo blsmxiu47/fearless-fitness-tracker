@@ -2,7 +2,7 @@
 
 import '../globals.css'
 
-export default function Home () {
+export default function Home() {
     return (
         <div>
             <div className="flex flex-wrap px-2 lg:px-4">

@@ -1,5 +1,5 @@
 import Sidebar  from './components/Sidebar'
-import { SidebarProvider, useSidebar } from './context/sidebar-provider'
+import { SidebarProvider } from './context/sidebar-provider'
 import Layout from './components/Layout'
  
 export default function RootLayout({

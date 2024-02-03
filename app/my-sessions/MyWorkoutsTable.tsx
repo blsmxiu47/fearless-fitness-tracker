@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 
 import { fetchEndpoint } from "../../utils/fetchEndpoint";
-import { Workout, Exercise } from "../../lib/types";
+import { Workout } from "../../lib/types";
 
 export default function MyWorkoutsTable() {
     const [workouts, setWorkouts] = useState<Workout[]>([]);
