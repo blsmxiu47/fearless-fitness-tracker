@@ -26,35 +26,39 @@ export default function MyWorkoutsTable() {
     }, []);
 
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Duration</th>
-                    <th>Exercises</th>
-                </tr>
-            </thead>
-            <tbody>
-                {isLoading && <tr><td>Loading workouts...</td></tr>}
-                {workouts.length === 0 && !isLoading && <tr><td>No workouts found</td></tr>}
-                {
-                    workouts.map((workout, i) => (
-                        <tr key={i}>
-                            <td>{workout.datetime?.toString()}</td>
-                            <td>{workout.type?.name}</td>
-                            <td>{workout.duration}</td>
-                            <td>
-                                <ul>
-                                    {workout.workout_exercises.map((e, i) => (
-                                        <li key={i}>{e.exercises.name}</li>
-                                    ))}
-                                </ul>
-                            </td>
+        <div className="py-2">
+            {isLoading && <p>Loading workouts...</p>}
+            {workouts.length === 0 && !isLoading && <p>No workouts found</p>}
+            {!isLoading && workouts.length > 0 && (
+                <table className="w-full">
+                    <thead>
+                        <tr className="text-xs sm:text-sm md:text-md font-semibold text-left bg-gray-800 border-b border-gray-600">
+                            <th className="w-1/5 px-4 py-3 rounded-tl-lg">Date</th>
+                            <th className="w-1/5 px-4 py-3">Type</th>
+                            <th className="w-1/5 px-4 py-3">Duration</th>
+                            <th className="w-1/5 px-4 py-3">Exercises</th>
                         </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        {
+                            workouts.map((workout, i) => (
+                                <tr key={i} className="overflow-x-hidden text-xs sm:text-sm md:text-md">
+                                    <td className="w-1/5 px-4 py-3">{workout.datetime?.toString()}</td>
+                                    <td className="w-1/5 px-4 py-3">{workout.type?.name}</td>
+                                    <td className="w-1/5 px-4 py-3">{workout.duration}</td>
+                                    <td className="w-1/5 px-4 py-3">
+                                        <ul>
+                                            {workout.workout_exercises.map((e, i) => (
+                                                <li key={i}>{e.exercises.name}</li>
+                                            ))}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            )}
+        </div>
     )
 }

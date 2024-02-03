@@ -7,7 +7,7 @@ import '../../globals.css'
 
 export default function MySessions() {
     return (
-        <div className="">
+        <div>
             <div className="px-2 py-4 flex flex-col sm:flex-row sm:flex-wrap justify-between sm:items-center">
                 <h2 className="py-2">My Sessions</h2>
                 <div className="flex flex-wrap sm:flex-row gap-2 text-xs">
@@ -23,6 +23,7 @@ export default function MySessions() {
                 </div>
             </div>
             <div className="py-8 flex flex-col sm:flex-row sm:flex-wrap justify-between text-xs">
+                {/* TODO: add toggle to switch between runs and workouts */}
                 <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
                     <div>
                         Search bar
@@ -35,7 +36,7 @@ export default function MySessions() {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="overflow-x-auto">
                 {/* table of results from prisma, with pagination. Sorting control as part of table header row. */}
                 <MyRunsTable />
                 <MyWorkoutsTable />

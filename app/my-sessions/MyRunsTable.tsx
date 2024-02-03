@@ -26,33 +26,35 @@ export default function MyRunsTable() {
     }, []);
 
     return (
-        <div className="overflow-hidden">
-            <table className="w-full">
-                <thead>
-                    <tr className="text-xs sm:text-sm md:text-md font-semibold text-left bg-gray-800 border-b border-gray-600">
-                        <th className="px-4 py-3 rounded-tl-lg">Date</th>
-                        <th className="px-4 py-3">Time</th>
-                        <th className="px-4 py-3">Duration</th>
-                        <th className="px-4 py-3">Distance</th>
-                        <th className="px-4 py-3 rounded-tr-lg">Elevation Gain</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {isLoading && <tr><td>Loading runs...</td></tr>}
-                    {runs.length === 0 && !isLoading && <tr><td>No runs found</td></tr>}
-                    {
-                        runs.map((run, i) => (
-                            <tr key={i} className="text-xs sm:text-sm md:text-md">
-                                <td className="px-4 py-3">{new Date(Date.parse(run.datetime)).toLocaleDateString()}</td>
-                                <td className="px-4 py-3">{new Date(Date.parse(run.datetime)).toLocaleTimeString()}</td>
-                                <td className="px-4 py-3">{run.duration}</td>
-                                <td className="px-4 py-3">{run.distance}</td>
-                                <td className="px-4 py-3">{run.elevation_gain}</td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
+        <div className="py-2">
+            {isLoading && <p>Loading runs...</p>}
+            {runs.length === 0 && !isLoading && <p>No runs found</p>}
+            {!isLoading && runs.length > 0 && (
+                <table className="w-full">
+                    <thead>
+                        <tr className="text-xs sm:text-sm md:text-md font-semibold text-left bg-gray-800 border-b border-gray-600">
+                            <th className="w-1/5 px-4 py-3 rounded-tl-lg">Date</th>
+                            <th className="w-1/5 px-4 py-3">Time</th>
+                            <th className="w-1/5 px-4 py-3">Duration</th>
+                            <th className="w-1/5 px-4 py-3">Distance</th>
+                            <th className="w-1/5 px-4 py-3 rounded-tr-lg">Elevation Gain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            runs.map((run, i) => (
+                                <tr key={i} className="overflow-x-hidden text-xs sm:text-sm md:text-md">
+                                    <td className="w-1/5 px-4 py-3">{new Date(Date.parse(run.datetime)).toLocaleDateString()}</td>
+                                    <td className="w-1/5 px-4 py-3">{new Date(Date.parse(run.datetime)).toLocaleTimeString()}</td>
+                                    <td className="w-1/5 px-4 py-3">{run.duration}</td>
+                                    <td className="w-1/5 px-4 py-3">{run.distance}</td>
+                                    <td className="w-1/5 px-4 py-3">{run.elevation_gain}</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            )}
         </div>
     )
 }
