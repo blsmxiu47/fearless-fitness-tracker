@@ -8,6 +8,8 @@ import { TimeSeriesResult } from '../../lib/types'
 import Card from '../components/Card'
 import TimeRangeSelect from '../components/TimeRangeSelect'
 import TimeUnitSelect from '../components/TimeUnitSelect'
+import ScatterTimeSeries from '../charts/ScatterTimeSeries'
+import LineTimeSeries from '../charts/LineTimeSeries'
 import BarTimeSeries from '../charts/BarTimeSeries'
 import LinePlot from '../charts/LinePlot'
 
@@ -33,6 +35,8 @@ export default function Dashboard() {
                 <TimeUnitSelect />
             </div>
             <div className="flex flex-wrap px-1 py-4 w-full justify-center">
+                <Card title={"Total Distance"} content={<ScatterTimeSeries data={distanceSums || []} />} />
+                <Card title={"Total Distance"} content={<LineTimeSeries data={distanceSums || []} />} />
                 <Card title={"Total Distance"} content={<BarTimeSeries data={distanceSums || []} />} />
                 <Card title={"Activities"} content={<LinePlot data={[1,2,3,4]} />} />
                 <Card title={"Activities Time"} content={<LinePlot data={[1,2,3,4]} />} />
