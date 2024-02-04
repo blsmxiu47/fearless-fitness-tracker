@@ -1,3 +1,24 @@
+export type CountResult = {
+    date: Date
+    year: number
+    month: number
+    dayofweek: string
+    count: number
+}
+
+export type TimeSeriesResult = {
+    date: Date
+    year: number
+    month: number
+    dayofweek: string
+    value: number
+}
+
+export type DateCount = {
+    date: Date,
+    count: number
+}
+
 export type ExerciseTmp = {
     id: number
     user_id: number
