@@ -40,9 +40,10 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             key={d.date.toString()}
             x={x(d.date)}
             y={y(d.value)}
-            width={10}
+            width={1}
             height={y(0) - y(d.value)}
             fill={`var(--primary)`}
+            fillOpacity={0.5}
         />
     ));
 
