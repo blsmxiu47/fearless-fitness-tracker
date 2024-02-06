@@ -14,7 +14,25 @@ type LineTimeSeriesProps = {
     marginRight?: number;
     marginBottom?: number;
     marginLeft?: number;
+    useMovingAverage?: boolean;
+    movingAverageWindow?: number;
 };
+
+function simpleMovingAverage(values: number[], window: number) {
+    if (!values || values.length < window) {
+        return [];
+    }
+    let index = window - 1;
+    const length = values.length + 1;
+    const simpleMovingAverages = [];
+    while (++index < length) {
+        const windowSlice = values.slice(index - window, index);
+        const sum = windowSlice.reduce((prev, curr) => prev + curr, 0);
+        simpleMovingAverages.push(sum / window);
+    }
+
+    return simpleMovingAverages;
+  }
 
 const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     data = [],
@@ -23,8 +41,19 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     marginTop = 20,
     marginRight = 20,
     marginBottom = 40,
-    marginLeft = 40
+    marginLeft = 40,
+    useMovingAverage = false,
+    movingAverageWindow = 7
 }) => {
+    // handle moving average
+    if (useMovingAverage) {
+        const values = data.map(d => d.value);
+        const means = simpleMovingAverage(values, movingAverageWindow);
+        const meansOfMeans = simpleMovingAverage(means, movingAverageWindow);
+        data = data.map((d, i) => ({ ...d, value: meansOfMeans[i] }));
+    }
+
+    // Create scales
     const x = d3.scaleTime(data.map(d => d.date), [marginLeft, width - marginRight])
         .domain([d3.min(data, d => d.date) || new Date(), d3.max(data, d => d.date) || new Date()])
         .range([marginLeft, width - marginRight]);
@@ -37,6 +66,20 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
         .x((d) => x(d.date))
         .y((d) => y(d.value))
         .curve(d3.curveMonotoneX)(data);
+    console.log(line);
+
+    // Add points as well
+    data = data.filter(d => d.value);
+    const points = data.map((d) =>
+                <circle
+                    key={d.date.toString()}
+                    cx={x(d.date)}
+                    cy={y(d.value)}
+                    r={1.5}
+                    fill="white"
+                    fillOpacity={0.9}
+                />
+    );
 
     // Create x-axis ticks
     const xAxisTicks = x.ticks().map((tickValue) => (
@@ -67,7 +110,8 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
                 <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
                     {yAxisTicks}
                 </g>
-                <path d={line || ''} fill="none" stroke="white" strokeWidth="1" />
+                <path d={line || ''} fill="none" fillOpacity={0.5} stroke={"var(--primary)"} strokeWidth="1" />
+                {points}
             </g>
         </svg>
     );
