@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 
 import { TimeSeriesResult } from '../../lib/types'
 
 import Card from '../components/Card'
 import SelectDropdown from '../components/SelectDropdown'
-import TimeUnitSelect from '../components/TimeUnitSelect'
 import LineTimeSeries from '../charts/LineTimeSeries'
 
 import getDistanceSummary from '../server-functions/data-processing/getDistanceSummary'
@@ -21,6 +20,7 @@ export default function Dashboard() {
     d.setDate(diff)
     console.log(d)
     const [dateRange, setDateRange] = useState<[Date, Date]>([d, new Date()])
+    const [timeUnit, setTimeUnit] = useState<'Days' | 'Weeks' | 'Months' | 'Years'>('Days')
     const [distanceSums, setDistanceSums] = useState<TimeSeriesResult[]>()
 
     const getAggregatedData = async () => {
@@ -69,19 +69,33 @@ export default function Dashboard() {
         }
     }
 
+    const handleTimeUnitChange = (unitSelection: string) => {
+        setTimeUnit(unitSelection as 'Days' | 'Weeks' | 'Months' | 'Years')
+    }
+
     return (
         <div>
             <div className="flex flex-wrap justify-center p-2 gap-4">
-                <SelectDropdown
-                    defaultOption='Past 7 Days'
-                    optionGroups={[
-                        [1, ['Past 7 Days', 'Past 28 Days', 'Past Year', 'All Time']],
-                        [2, ['This Week', 'This Month', 'This Year']],
-                        [3, ['Custom Range']]
-                    ]}
-                    onChange={() => handleTimeRangeChange}
-                />
-                <TimeUnitSelect />
+                <div className="w-[11rem]">
+                    <SelectDropdown
+                        defaultOption='Past 7 Days'
+                        optionGroups={[
+                            [1, ['Past 7 Days', 'Past 28 Days', 'Past Year', 'All Time']],
+                            [2, ['This Week', 'This Month', 'This Year']],
+                            [3, ['Custom Range']]
+                        ]}
+                        onChange={() => handleTimeRangeChange}
+                    />
+                </div>
+                <div className="w-[11rem]">
+                    <SelectDropdown
+                        defaultOption='Days'
+                        optionGroups={[
+                            [1, ['Days', 'Weeks', 'Months', 'Years']]
+                        ]}
+                        onChange={() => handleTimeUnitChange}
+                    />
+                </div>
             </div>
             <div className="flex flex-wrap px-1 py-4 w-full justify-center">
                 {isLoading && <p>Loading...</p>}
@@ -91,8 +105,8 @@ export default function Dashboard() {
                         content={
                             <LineTimeSeries 
                                 data={distanceSums || []}
-                                dateRange={[new Date('2022-01-01'), new Date()]}
-                                xGrain={"month"}
+                                dateRange={dateRange}
+                                xGrain={timeUnit}
                                 useMovingAverage={false}
                                 movingAverageWindow={3}
                             />

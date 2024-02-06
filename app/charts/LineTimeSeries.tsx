@@ -7,7 +7,7 @@ import { TimeSeriesResult } from '../../lib/types';
 
 import Tooltip from './Tooltip';
 
-type dateGrain = 'day' | 'week' | 'month' | 'year' | 'all-time';
+type dateGrain = 'Days' | 'Weeks' | 'Months' | 'Years';
 
 type LineTimeSeriesProps = {
     data: TimeSeriesResult[];
@@ -50,7 +50,7 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     marginBottom = 40,
     marginLeft = 40,
     dateRange = [],
-    xGrain = 'week',
+    xGrain = 'Weeks',
     useMovingAverage = false,
     movingAverageWindow = 7
 }) => {
@@ -62,12 +62,11 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     }
 
     // handle date grain (day, week, month, year, all-time)
-    if (xGrain !== 'day') {
+    if (xGrain !== 'Days') {
         const dateGrainMap = {
-            'week': d3.timeWeek,
-            'month': d3.timeMonth,
-            'year': d3.timeYear,
-            'all-time': d3.timeYear
+            'Weeks': d3.timeWeek,
+            'Months': d3.timeMonth,
+            'Years': d3.timeYear,
         };
         const dateGrainFunc = dateGrainMap[xGrain];
         // rollup data by date grain to get sum of values for each grain
@@ -131,11 +130,10 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
             <line y2={10} stroke="white" />
             <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
                 {
-                    xGrain === 'day' ? d3.timeFormat('%Y-%m-%d')(tickValue) :
-                    xGrain === 'week' ? d3.timeFormat('%Y-%m-%d')(tickValue) :
-                    xGrain === 'month' ? d3.timeFormat('%b')(tickValue) :
-                    xGrain === 'year' ? d3.timeFormat('%Y')(tickValue) :
-                    xGrain === 'all-time' ? d3.timeFormat('%Y')(tickValue) : ''
+                    xGrain === 'Days' ? d3.timeFormat('%Y-%m-%d')(tickValue) :
+                    xGrain === 'Weeks' ? d3.timeFormat('%Y-%m-%d')(tickValue) :
+                    xGrain === 'Months' ? d3.timeFormat('%b')(tickValue) :
+                    xGrain === 'Years' ? d3.timeFormat('%Y')(tickValue) : ''
                 }
             </text>
         </g>
