@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import * as d3 from 'd3';
 
 import { TimeSeriesResult } from '../../lib/types';
+
+import Tooltip from './Tooltip';
 
 type dateGrain = 'day' | 'week' | 'month' | 'year' | 'all-time';
 
@@ -51,6 +54,8 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     useMovingAverage = false,
     movingAverageWindow = 7
 }) => {
+    const [hoveredPoint, setHoveredPoint] = useState<TimeSeriesResult | null>(null);
+
     // Filter data by date range
     if (dateRange.length) {
         data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
@@ -115,7 +120,8 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
                     fill="white"
                     fillOpacity={0.9}
                     // display tooltip on hover
-                    onMouseOver={() => console.log('hovered: ', d)}
+                    onMouseOver={() => setHoveredPoint(d)}
+                    onMouseOut={() => setHoveredPoint(null)}
                 />
     );
 
@@ -146,24 +152,28 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     ));
 
     return (
-        <svg width={width} height={height} style={{ maxWidth: '100%', height: 'auto' }} preserveAspectRatio='xMinYMin meet'>
-            <g>
-                <g transform={`translate(0, ${height - marginBottom})`} style={{ font: '11px Arial', fill: 'white' }}>
-                    {xAxisTicks}
+        <div>
+            <svg width={width} height={height} style={{ maxWidth: '100%', height: 'auto' }} preserveAspectRatio='xMinYMin meet'>
+                <g>
+                    <g transform={`translate(0, ${height - marginBottom})`} style={{ font: '11px Arial', fill: 'white' }}>
+                        {xAxisTicks}
+                    </g>
+                    <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
+                        {yAxisTicks}
+                    </g>
+                    <path d={line || ''} fill="none" fillOpacity={0.5} stroke={"var(--primary)"} strokeWidth={lineWidth} />
+                    <path d={area || ''} fill={"var(--primary)"} fillOpacity={0.2} stroke={"none"} />
+                    {points}
                 </g>
-                <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
-                    {yAxisTicks}
-                </g>
-                <path d={line || ''} fill="none" fillOpacity={0.5} stroke={"var(--primary)"} strokeWidth={lineWidth} />
-                <path d={area || ''} fill={"var(--primary)"} fillOpacity={0.2} stroke={"none"} />
-                {points}
-            </g>
-        </svg>
-        // {pointHovered && (
-        //     <Tooltip
-        //         scales = {{x, y}}
-        //     />
-        // }
+            </svg>
+            {hoveredPoint && (
+                <Tooltip
+                    hoveredPoint={hoveredPoint}
+                    scales={{x, y}}
+                />
+            )
+            }
+        </div>
     );
 }
 
