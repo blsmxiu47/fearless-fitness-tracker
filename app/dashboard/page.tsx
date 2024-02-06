@@ -36,7 +36,18 @@ export default function Dashboard() {
             </div>
             <div className="flex flex-wrap px-1 py-4 w-full justify-center">
                 <Card title={"Total Distance"} content={<ScatterTimeSeries data={distanceSums || []} />} />
-                <Card title={"Total Distance"} content={<LineTimeSeries data={distanceSums || []} useMovingAverage={true} />} />
+                <Card
+                    title={"Total Distance"}
+                    content={
+                        <LineTimeSeries 
+                            data={distanceSums || []}
+                            dateRange={[new Date('2022-01-01'), new Date()]}
+                            xGrain={"month"}
+                            useMovingAverage={false}
+                            movingAverageWindow={3}
+                        />
+                    }
+                />
                 <Card title={"Total Distance"} content={<BarTimeSeries data={distanceSums || []} />} />
                 <Card title={"Activities"} content={<LinePlot data={[1,2,3,4]} />} />
                 <Card title={"Activities Time"} content={<LinePlot data={[1,2,3,4]} />} />
