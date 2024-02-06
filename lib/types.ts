@@ -8,9 +8,9 @@ export type CountResult = {
 
 export type TimeSeriesResult = {
     date: Date
-    year: number
-    month: number
-    dayofweek: string
+    // year: number
+    // month: number
+    // dayofweek: string
     value: number
 }
 
