@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import * as d3 from 'd3';
 
 import { TimeSeriesResult } from '../../lib/types';
 
 import Tooltip from './Tooltip';
 
-type dateGrain = 'Days' | 'Weeks' | 'Months' | 'Years';
+type xGrain = 'Days' | 'Weeks' | 'Months' | 'Years';
 
 type LineTimeSeriesProps = {
     data: TimeSeriesResult[];
@@ -20,7 +20,7 @@ type LineTimeSeriesProps = {
     marginBottom?: number;
     marginLeft?: number;
     dateRange?: [Date, Date];
-    xGrain?: dateGrain;
+    xGrain?: xGrain;
     useMovingAverage?: boolean;
     movingAverageWindow?: number;
 };
@@ -56,63 +56,78 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
 }) => {
     const [hoveredPoint, setHoveredPoint] = useState<TimeSeriesResult | null>(null);
 
-    // Filter data by date range
-    if (dateRange.length) {
-        data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
-    }
+    const plotData = useMemo(() => {
+        // Filter data by date range
+        if (dateRange.length) {
+            data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
+            const today = new Date();
+            const maxDate = d3.max(data, d => d.date);
+            const missingToDate = d3.timeDays(maxDate!, today);
+            const missingData = missingToDate.map(date => ({ date, value: 0 }));
+            data = data.concat(missingData);
+        }
 
-    // handle date grain (day, week, month, year, all-time)
-    if (xGrain !== 'Days') {
-        const dateGrainMap = {
-            'Weeks': d3.timeWeek,
-            'Months': d3.timeMonth,
-            'Years': d3.timeYear,
-        };
-        const dateGrainFunc = dateGrainMap[xGrain];
-        // rollup data by date grain to get sum of values for each grain
-        const agg_data = d3.rollups(data, v => d3.sum(v, d => d.value), d => dateGrainFunc(d.date));
-        data = agg_data.map(([date, value]) => ({ date, value }));
-    }
+        console.log('data pre-rollup', data);
 
-    // handle moving average
-    if (useMovingAverage) {
-        const values = data.map(d => d.value);
-        const means = simpleMovingAverage(values, movingAverageWindow);
-        data = data.map((d, i) => ({ ...d, value: means[i] }));
-    }
+        // handle date grain (day, week, month, year, all-time)
+        if (xGrain !== 'Days') {
+            const dateGrainMap = {
+                'Weeks': d3.timeWeek,
+                'Months': d3.timeMonth,
+                'Years': d3.timeYear,
+            };
+            const dateGrainFunc = dateGrainMap[xGrain];
+            // rollup data by date grain to get sum of values for each grain
+            const agg_data = d3.rollups(data, v => d3.sum(v, d => d.value), d => dateGrainFunc(d.date));
+            data = agg_data.map(([date, value]) => ({ date, value }));
+        }
 
-    // filter out any null values (e.g. from moving average calculations)
-    data = data.filter(d => !isNaN(d.value));
+        console.log('data post-rollup', data);
+
+        // handle moving average
+        if (useMovingAverage) {
+            const values = data.map(d => d.value);
+            const means = simpleMovingAverage(values, movingAverageWindow);
+            data = data.map((d, i) => ({ ...d, value: means[i] }));
+        }
+
+        // filter out any null values (e.g. from moving average calculations)
+        data = data.filter(d => !isNaN(d.value));
+
+        return data;
+    }, [data, dateRange, xGrain, useMovingAverage, movingAverageWindow]);
+
+    console.log('plotData', plotData);
 
     // set local vars
-    const pointRadius = data.length > 1000 ? 1 : 3;
-    const lineWidth = data.length > 1000 ? 1 : 2;
+    const pointRadius = plotData.length > 1000 ? 1 : 3;
+    const lineWidth = plotData.length > 1000 ? 1 : 2;
 
     // Create scales
-    const x = d3.scaleTime(data.map(d => d.date), [marginLeft, width - marginRight])
-        .domain([d3.min(data, d => d.date) || new Date(), d3.max(data, d => d.date) || new Date()])
+    const x = d3.scaleTime(plotData.map(d => d.date), [marginLeft, width - marginRight])
+        .domain([d3.min(plotData, d => d.date) || new Date(), d3.max(plotData, d => d.date) || new Date()])
         .range([marginLeft, width - marginRight]);
     const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.value) || 0])
+        .domain([0, d3.max(plotData, d => d.value) || 0])
         .range([height - marginBottom, marginTop]);
         
     // Create line
     const line = d3.line<TimeSeriesResult>()
         .x((d) => x(d.date))
         .y((d) => y(d.value))
-        .curve(d3.curveMonotoneX)(data);
+        .curve(d3.curveMonotoneX)(plotData);
     
     // Create area
     const area = d3.area<TimeSeriesResult>()
         .x((d) => x(d.date))
         .y0(y(0))
         .y1((d) => y(d.value))
-        .curve(d3.curveMonotoneX)(data);
+        .curve(d3.curveMonotoneX)(plotData);
         
     // Add points as well
-    const points = data.map((d) =>
+    const points = plotData.map((d, i) =>
                 <circle
-                    key={d.date.toString()}
+                    key={i}
                     cx={x(d.date)}
                     cy={y(d.value)}
                     r={pointRadius}
@@ -125,8 +140,8 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     );
 
     // Create x-axis ticks
-    const xAxisTicks = x.ticks().map((tickValue) => (
-        <g key={tickValue.toString()} transform={`translate(${x(tickValue)}, 0)`}>
+    const xAxisTicks = x.ticks().map((tickValue, i) => (
+        <g key={i} transform={`translate(${x(tickValue)}, 0)`}>
             <line y2={10} stroke="white" />
             <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
                 {
@@ -140,8 +155,8 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     ));
 
     // Create y-axis ticks
-    const yAxisTicks = y.ticks().map((tickValue) => (
-        <g key={tickValue} transform={`translate(0, ${y(tickValue)})`}>
+    const yAxisTicks = y.ticks().map((tickValue, i) => (
+        <g key={i} transform={`translate(0, ${y(tickValue)})`}>
             <line x2={width - marginLeft - marginRight / 2} stroke="white" strokeOpacity={0.2} />
             <text style={{ textAnchor: 'end', font: '11px Arial', fill: 'white' }} x={-10} dx=".16em">
                 {tickValue}

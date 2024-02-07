@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { TimeSeriesResult } from '../../lib/types'
 
@@ -14,14 +14,17 @@ import '../../globals.css'
 
 export default function Dashboard() {
     const [isLoading, setIsLoading] = useState(true)
+    const [timeUnit, setTimeUnit] = useState<'Days' | 'Weeks' | 'Months' | 'Years'>('Days')
+    const [distanceSums, setDistanceSums] = useState<TimeSeriesResult[]>()
+
     const d = new Date()
     const day = d.getDay()
     const diff = d.getDate() - day + (day == 0 ? -6 : 1)
     d.setDate(diff)
-    console.log(d)
+
     const [dateRange, setDateRange] = useState<[Date, Date]>([d, new Date()])
-    const [timeUnit, setTimeUnit] = useState<'Days' | 'Weeks' | 'Months' | 'Years'>('Days')
-    const [distanceSums, setDistanceSums] = useState<TimeSeriesResult[]>()
+    const [rangeSelection, setRangeSelection] = useState('Past 7 Days')
+    const [customDateRange, setCustomDateRange] = useState<[Date, Date]>([new Date(), new Date()])
 
     const getAggregatedData = async () => {
         const distanceSums = await getDistanceSummary()
@@ -33,29 +36,52 @@ export default function Dashboard() {
         getAggregatedData()
     }, [])
 
-    const handleTimeRangeChange = (rangeSelection: string) => {
-        let d = new Date()
+    useEffect(() => {
+        handleTimeRangeChange(rangeSelection, customDateRange)
+    }, [customDateRange])
+
+    const handleTimeRangeChange = (rangeSelection: string, customDateRange: [Date, Date]) => {
+        console.log('rangeSelection', rangeSelection)
+
+        let rangeStart = new Date()
+        let rangeEnd = new Date()
         switch (rangeSelection) {
-            case "past-7":
-                d.setDate(d.getDate() - 7)
-            case "past-28":
-                d.setDate(d.getDate() - 28)
-            case "past-year":
-                d.setFullYear(d.getFullYear() - 1)
-            case "all-time":
-                d = new Date(1900, 0, 0)
-            case "this-week":
-                const day = d.getDay()
+            case "Past 7 Days":
+                console.log('rangeStart pre-subtract', rangeStart)
+                rangeStart.setDate(rangeStart.getDate() - 6)
+                console.log('rangeStart post-subtract', rangeStart)
+                break
+            case "Past 28 Days":
+                console.log('rangeStart pre-subtract', rangeStart)
+                rangeStart.setDate(rangeStart.getDate() - 27)
+                console.log('rangeStart post-subtract', rangeStart)
+                break
+            case "Past Year":
+                rangeStart.setFullYear(rangeStart.getFullYear() - 1)
+                rangeStart.setDate(rangeStart.getDate() + 1)
+                break
+            case "All Time":
+                rangeStart = new Date(1900, 0, 0)
+                break
+            case "This Week":
+                const day = rangeStart.getDay()
                 // TODO: some people may not consider Monday as the first day of the week. 
                 // This is a bug in the brain, not the code, but nevertheless, add handling of user-set preferences
-                const diff = d.getDate() - day + (day == 0 ? -6 : 1)
-                d.setDate(diff)
-            case "this-month":
-                d.setDate(1)
-            case "this-year":
-                d.setMonth(0, 1)
-            case "custom":
-                // do nothing
+                const diff = rangeStart.getDate() - day + (day == 0 ? -6 : 1)
+                rangeStart.setDate(diff)
+                break
+            case "This Month":
+                rangeStart.setDate(1)
+                break
+            case "This Year":
+                rangeStart.setMonth(0, 1)
+                console.log('rangeStart', rangeStart)
+                break
+            case "Custom Range":
+                rangeStart = customDateRange[0]
+                rangeEnd = customDateRange[1]
+                console.log('Custom Range rangeStart rangeEnd', rangeStart, rangeEnd)
+                break
         }
 
         // ensure distanceSums is defined.
@@ -63,9 +89,14 @@ export default function Dashboard() {
         if (distanceSums) {
             const distanceSumDates = distanceSums.map(d => d.date.getTime())
             const dataMinDate = new Date(Math.min(...distanceSumDates))
-            const rangeStartDate = Math.max(d.getTime(), dataMinDate.getTime())
+            const rangeStartDate = Math.max(rangeStart.getTime(), dataMinDate.getTime())
+            const rangeEndDate = Math.min(rangeEnd.getTime(), new Date().getTime())
 
-            setDateRange([new Date(rangeStartDate), new Date()])
+            console.log('rangeStartDate, rangeEndDate', rangeStartDate, rangeEndDate)
+
+            setDateRange([new Date(rangeStartDate), new Date(rangeEndDate)])
+
+            console.log('dateRange', dateRange)
         }
     }
 
@@ -78,22 +109,24 @@ export default function Dashboard() {
             <div className="flex flex-wrap justify-center p-2 gap-4">
                 <div className="w-[11rem]">
                     <SelectDropdown
+                        label='Time Range'
                         defaultOption='Past 7 Days'
                         optionGroups={[
                             [1, ['Past 7 Days', 'Past 28 Days', 'Past Year', 'All Time']],
                             [2, ['This Week', 'This Month', 'This Year']],
                             [3, ['Custom Range']]
                         ]}
-                        onChange={() => handleTimeRangeChange}
+                        onChange={(rangeSelection) => handleTimeRangeChange(rangeSelection, customDateRange)}
                     />
                 </div>
                 <div className="w-[11rem]">
                     <SelectDropdown
+                        label='Time Unit'
                         defaultOption='Days'
                         optionGroups={[
                             [1, ['Days', 'Weeks', 'Months', 'Years']]
                         ]}
-                        onChange={() => handleTimeUnitChange}
+                        onChange={(option) => handleTimeUnitChange(option)}
                     />
                 </div>
             </div>
@@ -108,7 +141,7 @@ export default function Dashboard() {
                                 dateRange={dateRange}
                                 xGrain={timeUnit}
                                 useMovingAverage={false}
-                                movingAverageWindow={3}
+                                movingAverageWindow={7}
                             />
                         }
                     />
