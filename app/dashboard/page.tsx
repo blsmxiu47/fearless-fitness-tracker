@@ -6,7 +6,7 @@ import { TimeSeriesResult } from '../../lib/types'
 
 import Card from '../components/Card'
 import SelectDropdown from '../components/SelectDropdown'
-import LineTimeSeries from '../charts/LineTimeSeries'
+import BarTimeSeries from '../charts/BarTimeSeries'
 
 import getDistanceSummary from '../server-functions/data-processing/getDistanceSummary'
 
@@ -136,7 +136,7 @@ export default function Dashboard() {
                     <Card
                         title={"Total Distance"}
                         content={
-                            <LineTimeSeries 
+                            <BarTimeSeries 
                                 data={distanceSums || []}
                                 dateRange={dateRange}
                                 xGrain={timeUnit}
