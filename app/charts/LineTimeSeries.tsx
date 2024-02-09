@@ -54,7 +54,7 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
     useMovingAverage = false,
     movingAverageWindow = 7
 }) => {
-    const [hoveredPoint, setHoveredPoint] = useState<TimeSeriesResult | null>(null);
+    const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
 
     const plotData = useMemo(() => {
         // Filter data by date range
@@ -137,8 +137,8 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
                     fill="white"
                     fillOpacity={0.9}
                     // display tooltip on hover
-                    onMouseOver={() => setHoveredPoint(d)}
-                    onMouseOut={() => setHoveredPoint(null)}
+                    onMouseOver={() => setHoveredData(d)}
+                    onMouseOut={() => setHoveredData(null)}
                 />
     );
 
@@ -182,9 +182,9 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
                     {points}
                 </g>
             </svg>
-            {hoveredPoint && (
+            {hoveredData && (
                 <Tooltip
-                    hoveredPoint={hoveredPoint}
+                    hoveredData={hoveredData}
                     scales={{x, y}}
                 />
             )}
