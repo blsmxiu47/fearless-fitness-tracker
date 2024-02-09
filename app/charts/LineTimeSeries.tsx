@@ -70,6 +70,7 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
         console.log('data pre-rollup', data);
 
         // handle date grain (day, week, month, year, all-time)
+        let agg_data;
         if (xGrain !== 'Days') {
             const dateGrainMap = {
                 'Weeks': d3.timeWeek,
@@ -78,23 +79,25 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
             };
             const dateGrainFunc = dateGrainMap[xGrain];
             // rollup data by date grain to get sum of values for each grain
-            const agg_data = d3.rollups(data, v => d3.sum(v, d => d.value), d => dateGrainFunc(d.date));
-            data = agg_data.map(([date, value]) => ({ date, value }));
+            const rollup = d3.rollups(data, v => d3.sum(v, d => d.value), d => dateGrainFunc(d.date));
+            agg_data = rollup.map(([date, value]) => ({ date, value }));
+        } else {
+            agg_data = data;
         }
 
         console.log('data post-rollup', data);
 
         // handle moving average
         if (useMovingAverage) {
-            const values = data.map(d => d.value);
+            const values = agg_data.map(d => d.value);
             const means = simpleMovingAverage(values, movingAverageWindow);
-            data = data.map((d, i) => ({ ...d, value: means[i] }));
+            agg_data = agg_data.map((d, i) => ({ ...d, value: means[i] }));
         }
 
         // filter out any null values (e.g. from moving average calculations)
-        data = data.filter(d => !isNaN(d.value));
+        agg_data = agg_data.filter(d => !isNaN(d.value));
 
-        return data;
+        return agg_data;
     }, [data, dateRange, xGrain, useMovingAverage, movingAverageWindow]);
 
     console.log('plotData', plotData);
@@ -184,8 +187,7 @@ const LineTimeSeries: React.FC<LineTimeSeriesProps> = ({
                     hoveredPoint={hoveredPoint}
                     scales={{x, y}}
                 />
-            )
-            }
+            )}
         </div>
     );
 }
