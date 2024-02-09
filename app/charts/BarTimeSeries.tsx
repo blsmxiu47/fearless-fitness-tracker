@@ -46,7 +46,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     width = 640,
     height = 400,
     marginTop = 20,
-    marginRight = 20,
+    marginRight = 40,
     marginBottom = 40,
     marginLeft = 40,
     dateRange = [],
@@ -56,16 +56,43 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
 }) => {
     const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
 
-    const plotData = useMemo(() => {
-        // Filter data by date range
-        if (dateRange.length) {
-            data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
-            const today = new Date();
-            const maxDate = d3.max(data, d => d.date);
-            const missingToDate = d3.timeDays(maxDate!, today);
-            const missingData = missingToDate.map(date => ({ date, value: 0 }));
-            data = data.concat(missingData);
+    // TODO: remove this brainstorming block
+    // SO we have several possible arrangements that we want to account for in a visually-pleasing way
+    // Starting from the smallest grain and going up:
+    // 0. No data for the dateRange
+    // 1. xGrain = 'Days', 1 day <= dateRange <= 1 week
+    //    -> xTicks are like Mon, Tue, Wed, Thu, Fri, Sat, Sun
+    // 2. xGrain = 'Days', 1 week < dateRange <= 1 month
+    //    -> xTicks: %m/%d
+    // 3. xGrain = 'Days', 1 month < dateRange <= 2 years
+    //    -> xTicks: %b
+    // 4. xGrain = 'Days', 2 years < dateRange
+    //    -> xTicks: %Y
+    // 5. xGrain = 'Weeks', 1 day <= dateRange <= 1 month
+    //    -> xTicks: %m/%d
+    // 6. xGrain = 'Weeks', 1 month < dateRange <= 2 years
+    //    -> xTicks: %b
+    // 7. xGrain = 'Weeks', 2 years < dateRange
+    //    -> xTicks: %Y
+    // 8. xGrain = 'Months', dateRange <= 2 years
+    //    -> xTicks: %b
+    // 9. xGrain = 'Months', 2 years < dateRange
+    //    -> xTicks: %Y
+    // 10. xGrain = 'Years'
+    //    -> xTicks: %Y
+
+    const [plotData, xTicksFormat] = useMemo(() => {
+        if (dateRange.length != 2) {
+            return [[], d3.timeFormat('%Y')];
         }
+        // Filter data by date range
+        data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
+        const today = new Date();
+        const maxDate = d3.max(data, d => d.date);
+        const missingToDate = d3.timeDays(maxDate!, today);
+        const missingData = missingToDate.map(date => ({ date, value: 0 }));
+        data = data.concat(missingData);
+        
 
         console.log('data pre-rollup', data);
 
@@ -97,16 +124,49 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         // filter out any null values (e.g. from moving average calculations)
         agg_data = agg_data.filter(d => !isNaN(d.value));
 
-        return agg_data;
+        // Set up xTicks based on xGrain and dateRange
+        const dateRangeDiff = dateRange[1].getTime() - dateRange[0].getTime();
+        let xTicksFormat;
+        switch (xGrain) {
+            case 'Days':
+                if (dateRangeDiff <= 7 * 24 * 60 * 60 * 1000) { // 1 week
+                    xTicksFormat = d3.timeFormat('%a');
+                } else if (dateRangeDiff <= 30 * 24 * 60 * 60 * 1000) { // 1 month
+                    xTicksFormat = d3.timeFormat('%m/%d');
+                } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                    xTicksFormat = d3.timeFormat('%b');
+                } else {
+                    xTicksFormat = d3.timeFormat('%Y');
+                }
+            case 'Weeks':
+                if (dateRangeDiff <= 30 * 24 * 60 * 60 * 1000) { // 1 month
+                    xTicksFormat = d3.timeFormat('%m/%d');
+                } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                    xTicksFormat = d3.timeFormat('%b');
+                } else {
+                    xTicksFormat = d3.timeFormat('%Y');
+                }
+            case 'Months':
+                if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                    xTicksFormat = d3.timeFormat('%b');
+                } else {
+                    xTicksFormat = d3.timeFormat('%Y');
+                }
+            case 'Years':
+                xTicksFormat = d3.timeFormat('%Y');
+        }
+
+        return [agg_data, xTicksFormat];
     }, [data, dateRange, xGrain, useMovingAverage, movingAverageWindow]);
 
     console.log('plotData', plotData);
 
     // Create scales
-    // TODO: xScale and xTocks need re-working for bar chart with datetimes
-    const x = d3.scaleTime(plotData.map(d => d.date), [marginLeft, width - marginRight])
+    // TODO: xScale and xTicks need re-working for bar chart with datetimes based on xTicksFormat
+    const x = d3.scaleTime()
         .domain([d3.min(plotData, d => d.date) || new Date(), d3.max(plotData, d => d.date) || new Date()])
         .range([marginLeft, width - marginRight]);
+
     const y = d3.scaleLinear()
         .domain([0, d3.max(plotData, d => d.value) || 0])
         .range([height - marginBottom, marginTop]);
@@ -125,7 +185,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     const bars = plotData.map((d, i) => (
         <rect
             key={i}
-            x={x(d.date)}
+            // TODO: x start should be in the center of its bin
+            x={x(d.date) + (width / (plotData.length * 1.2) / 7)}
             y={y(d.value)}
             width={width / (plotData.length * 1.2)}
             height={height - marginBottom - y(d.value)}
@@ -138,18 +199,22 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         />
     ));
 
+    const xTicks = plotData.map((d, i) => (
+        <g key={i} transform={`translate(${x(d.date)}, 0)`}>
+            <line y2={10} stroke="white" />
+            <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
+                {xTicksFormat(d.date)}
+            </text>
+        </g>
+    ));
+
     // Create x-axis ticks
-    // TODO: xScale and xTocks need re-working for bar chart with datetimes
+    // TODO: xScale and xTicks need re-working for bar chart with datetimes based on xTicksFormat
     const xAxisTicks = x.ticks().map((tickValue, i) => (
         <g key={i} transform={`translate(${x(tickValue)}, 0)`}>
             <line y2={10} stroke="white" />
             <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
-                {
-                    xGrain === 'Days' ? d3.timeFormat('%Y-%m-%d')(tickValue) :
-                    xGrain === 'Weeks' ? d3.timeFormat('%Y-%m-%d')(tickValue) :
-                    xGrain === 'Months' ? d3.timeFormat('%b')(tickValue) :
-                    xGrain === 'Years' ? d3.timeFormat('%Y')(tickValue) : ''
-                }
+                {xTicksFormat(tickValue)}
             </text>
         </g>
     ));
@@ -169,7 +234,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             <svg width={width} height={height} style={{ maxWidth: '100%', height: 'auto' }} preserveAspectRatio='xMinYMin meet'>
                 <g>
                     <g transform={`translate(0, ${height - marginBottom})`} style={{ font: '11px Arial', fill: 'white' }}>
-                        {xAxisTicks}
+                        {xTicks}
                     </g>
                     <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
                         {yAxisTicks}
