@@ -25,6 +25,13 @@ type BarTimeSeriesProps = {
     movingAverageWindow?: number;
 };
 
+type xPeriodMidpoint = {
+    original: number;
+    midpoint: number;
+    formatted: string;
+    altLabel: string | null;
+};
+
 function simpleMovingAverage(values: number[], window: number) {
     if (!values || values.length < window) {
         return [];
@@ -56,10 +63,13 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
 }) => {
     const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
     
-    const [plotData, xTicksFormat] = useMemo(() => {
+    let xLabsFormatSpec = '%m/%d';
+
+    const [plotData, xPeriodMidpoints] = useMemo(() => {
         if (dateRange.length != 2) {
             return [[], d3.timeFormat('%Y')];
         }
+
         // Filter data by date range
         data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
         const today = new Date();
@@ -67,14 +77,14 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         const missingToDate = d3.timeDays(maxDate!, today);
         const missingData = missingToDate.map(date => ({ date, value: 0 }));
         data = data.concat(missingData);
-        
-        // handle date grain (day, week, month, year, all-time)
+
         let agg_data;
         if (xGrain !== 'Days') {
             const dateGrainMap = {
-                'Weeks': d3.timeWeek,
-                'Months': d3.timeMonth,
-                'Years': d3.timeYear,
+                // midways through the week, so midday Wednesday
+                'Weeks': (x: Date) => { return new Date(d3.timeWednesday(x).setHours(12)); },
+                'Months': (x: Date) => { return new Date(d3.timeMonth(x).setDate(15)); },
+                'Years': (x: Date) => new Date(x.getFullYear(), 6, 1),
             };
             const dateGrainFunc = dateGrainMap[xGrain];
             // rollup data by date grain to get sum of values for each grain
@@ -96,43 +106,119 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
 
         // Set up xTicks based on xGrain and dateRange
         const dateRangeDiff = dateRange[1].getTime() - dateRange[0].getTime();
-        let xTicksFormat;
+        let xLabsFormat = d3.timeFormat('%m/%d');
         switch (xGrain) {
             case 'Days':
                 if (dateRangeDiff <= 7 * 24 * 60 * 60 * 1000) { // 7 days
-                    xTicksFormat = d3.timeFormat('%a');
+                    xLabsFormatSpec = '%a';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
-                    xTicksFormat = d3.timeFormat('%m/%d');
+                    xLabsFormatSpec = '%m/%d';
+                    xLabsFormat = d3.timeFormat('%m/%d');
                 } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
-                    xTicksFormat = d3.timeFormat('%b');
+                    xLabsFormatSpec = '%b';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else {
-                    xTicksFormat = d3.timeFormat('%Y');
+                    xLabsFormatSpec = '%Y';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 }
                 break;
             case 'Weeks':
                 if (dateRangeDiff <= 180 * 24 * 60 * 60 * 1000) { // 180 days
-                    xTicksFormat = d3.timeFormat('%m/%d');
+                    xLabsFormatSpec = '%m/%d';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
-                    xTicksFormat = d3.timeFormat('%b');
+                    xLabsFormatSpec = '%b';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else {
-                    xTicksFormat = d3.timeFormat('%Y');
+                    xLabsFormatSpec = '%Y';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 }
                 break;
             case 'Months':
                 if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
-                    xTicksFormat = d3.timeFormat('%b');
+                    xLabsFormatSpec = '%b';
+                    xLabsFormat = d3.timeFormat('%b');
                 } else {
-                    xTicksFormat = d3.timeFormat('%Y');
+                    xLabsFormatSpec = '%Y';
+                    xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 }
                 break;
             case 'Years':
-                xTicksFormat = d3.timeFormat('%Y');
+                xLabsFormatSpec = '%Y';
+                xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 break;
             default:
-                xTicksFormat = d3.timeFormat('%0m/%0d');
+                xLabsFormatSpec = '%m/%d';
+                xLabsFormat = d3.timeFormat(xLabsFormatSpec);
         }
 
-        return [agg_data, xTicksFormat];
+        const xTicksArray = new Map();
+        agg_data.forEach(d => {
+            const original = d.date.getTime();
+            const formatted = xLabsFormat(d.date);
+            xTicksArray.set(original, formatted);
+        });
+        // Loop through xTicksArray and for each period present, generate a midpoint map in addition to the original map.
+        // Midpoint is the middle of the period shown by formatted date. For example, if the original is 3rd of January, 2022, the formatted date 'Jan', then the midpoint is 15th of January, 2022. If formatted date is '2023', the midpoint is 1st of July 2023, etc.
+        const xPeriodMidpoints: xPeriodMidpoint[] = [];
+        xTicksArray.forEach((value, key) => {
+            const date = new Date(key);
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const day = new Date(year, month, date.getDate()).getTime();
+            const mondayOfTheWeek = d3.timeMonday(date);
+            const weekStart = mondayOfTheWeek.getTime();
+            const weekMidpoint = new Date(mondayOfTheWeek.getFullYear(), mondayOfTheWeek.getMonth(), mondayOfTheWeek.getDate() + 2).setHours(12);
+            const monthStart = new Date(year, month, 1).getTime();
+            const monthMidpoint = new Date(year, month, 15).getTime();
+            const yearStart = new Date(year, 0, 1).getTime();
+            const yearMidpoint = new Date(year, 6, 1).getTime();
+            
+            let midpoint = 0;
+            let altLabel = null;
+            switch (xGrain) {
+                case 'Days':
+                    if (dateRangeDiff <= 14 * 24 * 60 * 60 * 1000) { // 14 days
+                        midpoint = day;
+                    } else if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
+                        midpoint = weekMidpoint;
+                    } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                        midpoint = monthStart;
+                    } else {
+                        midpoint = yearStart;
+                    }
+                    break;
+                case 'Weeks':
+                    if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
+                        midpoint = weekMidpoint;
+                        altLabel = d3.timeFormat('%m/%d')(new Date(weekStart));
+                    } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                        midpoint = monthStart;
+                    } else {
+                        midpoint = yearStart;
+                    }
+                    break;
+                case 'Months':
+                    if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                        midpoint = monthMidpoint;
+                    } else {
+                        midpoint = yearStart;
+                    }
+                    break;
+                case 'Years':
+                    midpoint = yearMidpoint;
+                    break;
+                default:
+                    midpoint = yearMidpoint;
+            }
+            // IFF the midpoint is not already in the array, add it to the array.
+            if (!xPeriodMidpoints.some(d => d.midpoint === midpoint)) {
+                xPeriodMidpoints.push({original: key, midpoint: midpoint, formatted: value, altLabel: altLabel});
+            }
+        });
+
+        return [agg_data, xPeriodMidpoints];
     }, [data, dateRange, xGrain, useMovingAverage, movingAverageWindow]);
 
     // Create scales
@@ -145,12 +231,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     // The left edge of the second bar should be at W / B + W / B / 8, and so on.
     const B = plotData.length;
     const W = width - marginLeft - marginRight;
-    const xTicksGap = W / B;
+    const binWidth = W / B;
     const barWidth = W / B * 3 / 4;
-
-    const x = d3.scaleTime()
-        .domain([d3.min(plotData, d => d.date) || new Date(), d3.max(plotData, d => d.date) || new Date()])
-        .range([marginLeft, width - marginRight]);
 
     const y = d3.scaleLinear()
         .domain([0, d3.max(plotData, d => d.value) || 0])
@@ -170,7 +252,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     const bars = plotData.map((d, i) => (
         <rect
             key={i}
-            x={marginLeft + W / B / 8 + i * xTicksGap}
+            x={marginLeft + W / B / 8 + i * binWidth}
             y={y(d.value)}
             width={barWidth}
             height={height - marginBottom - y(d.value)}
@@ -183,15 +265,72 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         />
     ));
 
-    // TODO: for long time ranges, only show unique x labels (e.g. only show one instance of '2023' when xGrain is 'Days' but date range spans multiple years)
-    const xTicks = plotData.map((d, i) => (
-        <g key={i} transform={`translate(${marginLeft + i * xTicksGap}, 0)`}>
-            <line y2={10} stroke="white" />
-            {/* {i % Math.ceil(B / 8) === 0 ? ( */}
-                <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em" y={15} transform={`translate(${xTicksGap * 0.5})`}>
-                    {xTicksFormat(d.date)}
-                </text>
-            {/* ) : null} */}
+    let xTicksHeight = 0;
+    if (plotData.length < 27) {
+        xTicksHeight = 6;
+    }
+    else if (plotData.length < 90) {
+        xTicksHeight = 4;
+    }
+    else if (plotData.length < 200) {
+        xTicksHeight = 2;
+    }
+
+    // B+1 xTicks
+    const xTicks = [...Array(B + 1)].map((d, i) => (
+        <g key={i} transform={`translate(${marginLeft + i * binWidth}, 0)`}>
+            <line y1={0} y2={xTicksHeight} stroke="white" />
+        </g>
+    ));
+
+    // x-axis scale
+    let x = d3.scaleTime()
+        .domain([d3.min(plotData, d => d.date) || new Date(), d3.max(plotData, d => d.date) || new Date()])
+        .range([marginLeft + binWidth / 2, width - marginRight - binWidth / 2]);
+
+    // In order to accurately place the x-axis labels, we need to map the range of xPeriodMidpoints to the range of x(plotData range)
+    const plotDataMinDate = d3.min(plotData, d => d.date)?.getTime() || new Date().getTime();
+    const plotDataMaxDate = d3.max(plotData, d => d.date)?.getTime() || new Date().getTime();
+    console.log('plotDataMinDate', new Date(plotDataMinDate));
+    console.log('plotDataMaxDate', new Date(plotDataMaxDate));
+    console.log('xGrain', xGrain);
+    console.log('plotData.length', plotData.length);
+    console.log('xLabsFormatSpec', xLabsFormatSpec);
+    // So, if the range of x(plotData range) is [2024-01-14, 2024-04-10], the range of xPeriodMidpoints is [2024-01-01, 2024-04-01], 
+    // and x range is [40, 600].
+    // so extent of x is 600 - 40 = 560, and extent of plotData is 2024-04-10 - 2024-01-14 = 86 days (though it will actually be in milliseconds).
+    // then we need to scale the xPeriodMidpoints range such that:
+    //   2024-02-01 would be around (40 + 560 * (2024-02-01 - 2024-01-14) / 86) = 40 + 560 * 18 / 86 = 40 + 560 * 0.2093 = 40 + 117.2 = 157.2
+    //   2024-03-01 would be around , 2024-04-01 would be around 40 + 560 * (2024-04-01 - 2024-01-14) / 86 = 40 + 560 * 77 / 86 = 40 + 560 * 0.8953 = 40 + 501.7 = 541.7
+    //   2024-04-01 would be around 40 + 560 * (2024-04-01 - 2024-01-14) / 86 = 40 + 560 * 77 / 86 = 40 + 560 * 0.8953 = 40 + 501.7 = 541.7
+    //   (But again this is all in milliseconds, not days, so the actual numbers will be slightly different.)
+    // So, we need to scale the xPeriodMidpoints range to the range of x(plotData range).
+
+    const xPeriodMidpointsScaled = (xPeriodMidpoints as xPeriodMidpoint[]).map(d => {
+        const date = new Date(d.midpoint).setHours(12);
+        console.log('W', W);
+        console.log('B', B);
+        console.log('binWidth', binWidth);
+        console.log('date', new Date(date));
+        console.log('x.range()', x.range());
+        const scaled = (x.range()[0] + x.range()[1] * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate));
+        console.log('scaled', scaled);
+        return { ...d, scaled: scaled };
+    });
+    console.log('xPeriodMidpoints', xPeriodMidpoints);
+    console.log('xPeriodMidpointsScaled', xPeriodMidpointsScaled);
+
+    // Create x-axis labels
+    type xPeriodMidpointScaled = xPeriodMidpoint & { scaled: number };
+    const xLabelGap = 10;
+    const xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
+        (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+        <g key={i} transform={`translate(${x(d.midpoint)}, 0)`}>
+            <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
+            <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                {/* { if (d.altLabel) d.altLabel else d.formatted} */}
+                {d.altLabel ? d.altLabel : d.formatted}
+            </text>
         </g>
     ));
 
@@ -211,6 +350,9 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                 <g>
                     <g transform={`translate(0, ${height - marginBottom})`} style={{ font: '11px Arial', fill: 'white' }}>
                         {xTicks}
+                    </g>
+                    <g transform={`translate(0, ${height - marginBottom + xLabelGap})`} style={{ font: '11px Arial', fill: 'white' }}>
+                        {xLabels}
                     </g>
                     <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
                         {yTicks}
