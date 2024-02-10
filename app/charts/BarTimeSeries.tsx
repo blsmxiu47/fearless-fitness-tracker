@@ -162,7 +162,20 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     console.log('plotData', plotData);
 
     // Create scales
-    // TODO: xScale and xTicks need re-working for bar chart with datetimes based on xTicksFormat
+    // Let there be B bars, defined by the length of plotData
+    // There then need to be B bins, and B+1 xTicks.
+    // Let the total width of the chart (excluding margins) be W
+    // The distance between each xTick should be W / B.
+    // The width of each bar should be W / B * 3/4.
+    // The left edge of the first bar should be at W / B / 8.
+    // The left edge of the second bar should be at W / B + W / B / 8, and so on.
+
+    const B = plotData.length;
+    const W = width - marginLeft - marginRight;
+    const xTicksGap = W / B;
+    const barWidth = W / B * 3 / 4;
+
+
     const x = d3.scaleTime()
         .domain([d3.min(plotData, d => d.date) || new Date(), d3.max(plotData, d => d.date) || new Date()])
         .range([marginLeft, width - marginRight]);
@@ -186,9 +199,9 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         <rect
             key={i}
             // TODO: x start should be in the center of its bin
-            x={x(d.date) + (width / (plotData.length * 1.2) / 7)}
+            x={marginLeft + W / B / 8 + i * xTicksGap}
             y={y(d.value)}
-            width={width / (plotData.length * 1.2)}
+            width={barWidth}
             height={height - marginBottom - y(d.value)}
             stroke={"#fff"}
             strokeWidth={outline_width}
@@ -200,7 +213,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     ));
 
     const xTicks = plotData.map((d, i) => (
-        <g key={i} transform={`translate(${x(d.date)}, 0)`}>
+        <g key={i} transform={`translate(${marginLeft + i * xTicksGap}, 0)`}>
             <line y2={10} stroke="white" />
             <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
                 {xTicksFormat(d.date)}
