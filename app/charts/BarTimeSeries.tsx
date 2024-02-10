@@ -55,32 +55,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     movingAverageWindow = 7
 }) => {
     const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
-
-    // TODO: remove this brainstorming block
-    // SO we have several possible arrangements that we want to account for in a visually-pleasing way
-    // Starting from the smallest grain and going up:
-    // 0. No data for the dateRange
-    // 1. xGrain = 'Days', 1 day <= dateRange <= 1 week
-    //    -> xTicks are like Mon, Tue, Wed, Thu, Fri, Sat, Sun
-    // 2. xGrain = 'Days', 1 week < dateRange <= 1 month
-    //    -> xTicks: %m/%d
-    // 3. xGrain = 'Days', 1 month < dateRange <= 2 years
-    //    -> xTicks: %b
-    // 4. xGrain = 'Days', 2 years < dateRange
-    //    -> xTicks: %Y
-    // 5. xGrain = 'Weeks', 1 day <= dateRange <= 1 month
-    //    -> xTicks: %m/%d
-    // 6. xGrain = 'Weeks', 1 month < dateRange <= 2 years
-    //    -> xTicks: %b
-    // 7. xGrain = 'Weeks', 2 years < dateRange
-    //    -> xTicks: %Y
-    // 8. xGrain = 'Months', dateRange <= 2 years
-    //    -> xTicks: %b
-    // 9. xGrain = 'Months', 2 years < dateRange
-    //    -> xTicks: %Y
-    // 10. xGrain = 'Years'
-    //    -> xTicks: %Y
-
+    
     const [plotData, xTicksFormat] = useMemo(() => {
         if (dateRange.length != 2) {
             return [[], d3.timeFormat('%Y')];
@@ -93,9 +68,6 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         const missingData = missingToDate.map(date => ({ date, value: 0 }));
         data = data.concat(missingData);
         
-
-        console.log('data pre-rollup', data);
-
         // handle date grain (day, week, month, year, all-time)
         let agg_data;
         if (xGrain !== 'Days') {
@@ -112,8 +84,6 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             agg_data = data;
         }
 
-        console.log('data post-rollup', data);
-
         // handle moving average
         if (useMovingAverage) {
             const values = agg_data.map(d => d.value);
@@ -129,37 +99,41 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         let xTicksFormat;
         switch (xGrain) {
             case 'Days':
-                if (dateRangeDiff <= 7 * 24 * 60 * 60 * 1000) { // 1 week
+                if (dateRangeDiff <= 7 * 24 * 60 * 60 * 1000) { // 7 days
                     xTicksFormat = d3.timeFormat('%a');
-                } else if (dateRangeDiff <= 30 * 24 * 60 * 60 * 1000) { // 1 month
+                } else if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
                     xTicksFormat = d3.timeFormat('%m/%d');
                 } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
                     xTicksFormat = d3.timeFormat('%b');
                 } else {
                     xTicksFormat = d3.timeFormat('%Y');
                 }
+                break;
             case 'Weeks':
-                if (dateRangeDiff <= 30 * 24 * 60 * 60 * 1000) { // 1 month
+                if (dateRangeDiff <= 180 * 24 * 60 * 60 * 1000) { // 180 days
                     xTicksFormat = d3.timeFormat('%m/%d');
                 } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
                     xTicksFormat = d3.timeFormat('%b');
                 } else {
                     xTicksFormat = d3.timeFormat('%Y');
                 }
+                break;
             case 'Months':
                 if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
                     xTicksFormat = d3.timeFormat('%b');
                 } else {
                     xTicksFormat = d3.timeFormat('%Y');
                 }
+                break;
             case 'Years':
                 xTicksFormat = d3.timeFormat('%Y');
+                break;
+            default:
+                xTicksFormat = d3.timeFormat('%0m/%0d');
         }
 
         return [agg_data, xTicksFormat];
     }, [data, dateRange, xGrain, useMovingAverage, movingAverageWindow]);
-
-    console.log('plotData', plotData);
 
     // Create scales
     // Let there be B bars, defined by the length of plotData
@@ -169,12 +143,10 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     // The width of each bar should be W / B * 3/4.
     // The left edge of the first bar should be at W / B / 8.
     // The left edge of the second bar should be at W / B + W / B / 8, and so on.
-
     const B = plotData.length;
     const W = width - marginLeft - marginRight;
     const xTicksGap = W / B;
     const barWidth = W / B * 3 / 4;
-
 
     const x = d3.scaleTime()
         .domain([d3.min(plotData, d => d.date) || new Date(), d3.max(plotData, d => d.date) || new Date()])
@@ -198,7 +170,6 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     const bars = plotData.map((d, i) => (
         <rect
             key={i}
-            // TODO: x start should be in the center of its bin
             x={marginLeft + W / B / 8 + i * xTicksGap}
             y={y(d.value)}
             width={barWidth}
@@ -212,30 +183,22 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         />
     ));
 
+    // TODO: for long time ranges, only show unique x labels (e.g. only show one instance of '2023' when xGrain is 'Days' but date range spans multiple years)
     const xTicks = plotData.map((d, i) => (
         <g key={i} transform={`translate(${marginLeft + i * xTicksGap}, 0)`}>
             <line y2={10} stroke="white" />
-            <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
-                {xTicksFormat(d.date)}
-            </text>
-        </g>
-    ));
-
-    // Create x-axis ticks
-    // TODO: xScale and xTicks need re-working for bar chart with datetimes based on xTicksFormat
-    const xAxisTicks = x.ticks().map((tickValue, i) => (
-        <g key={i} transform={`translate(${x(tickValue)}, 0)`}>
-            <line y2={10} stroke="white" />
-            <text style={{ textAnchor: 'middle', font: '9px Arial', fill: 'white' }} dy=".16em" y={25}>
-                {xTicksFormat(tickValue)}
-            </text>
+            {/* {i % Math.ceil(B / 8) === 0 ? ( */}
+                <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em" y={15} transform={`translate(${xTicksGap * 0.5})`}>
+                    {xTicksFormat(d.date)}
+                </text>
+            {/* ) : null} */}
         </g>
     ));
 
     // Create y-axis ticks
-    const yAxisTicks = y.ticks().map((tickValue, i) => (
+    const yTicks = y.ticks().map((tickValue, i) => (
         <g key={i} transform={`translate(0, ${y(tickValue)})`}>
-            <line x2={width - marginLeft - marginRight / 2} stroke="white" strokeOpacity={0.2} />
+            <line x2={width - marginLeft - marginRight} stroke="white" strokeOpacity={0.2} />
             <text style={{ textAnchor: 'end', font: '11px Arial', fill: 'white' }} x={-10} dx=".16em">
                 {tickValue}
             </text>
@@ -250,7 +213,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                         {xTicks}
                     </g>
                     <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
-                        {yAxisTicks}
+                        {yTicks}
                     </g>
                     {bars}
                 </g>
