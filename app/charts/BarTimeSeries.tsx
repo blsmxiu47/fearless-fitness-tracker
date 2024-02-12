@@ -62,10 +62,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     movingAverageWindow = 7
 }) => {
     const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
-    
-    let xLabsFormatSpec = '%m/%d';
 
-    const [plotData, xPeriodMidpoints] = useMemo(() => {
+    const [plotData, xPeriodMidpoints, xLabsFormatSpec] = useMemo(() => {
         if (dateRange.length != 2) {
             return [[], d3.timeFormat('%Y')];
         }
@@ -78,21 +76,17 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         const missingData = missingToDate.map(date => ({ date, value: 0 }));
         data = data.concat(missingData);
 
-        let agg_data;
-        if (xGrain !== 'Days') {
-            const dateGrainMap = {
-                // midways through the week, so midday Wednesday
-                'Weeks': (x: Date) => { return new Date(d3.timeWednesday(x).setHours(12)); },
-                'Months': (x: Date) => { return new Date(d3.timeMonth(x).setDate(15)); },
-                'Years': (x: Date) => new Date(x.getFullYear(), 6, 1),
-            };
-            const dateGrainFunc = dateGrainMap[xGrain];
-            // rollup data by date grain to get sum of values for each grain
-            const rollup = d3.rollups(data, v => d3.sum(v, d => d.value), d => dateGrainFunc(d.date));
-            agg_data = rollup.map(([date, value]) => ({ date, value }));
-        } else {
-            agg_data = data;
-        }
+        const dateGrainMap = {
+            'Days': (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate(), 12),
+            // midways through the week, so midday Wednesday
+            'Weeks': (x: Date) => { return new Date(d3.timeWednesday(x).setHours(12)); },
+            'Months': (x: Date) => { return new Date(d3.timeMonth(x).setDate(15)); },
+            'Years': (x: Date) => new Date(x.getFullYear(), 6, 1),
+        };
+        const dateGrainFunc = dateGrainMap[xGrain];
+        // rollup data by date grain to get sum of values for each grain
+        const rollup = d3.rollups(data, v => d3.sum(v, d => d.value), d => dateGrainFunc(d.date));
+        let agg_data = rollup.map(([date, value]) => ({ date, value }));
 
         // handle moving average
         if (useMovingAverage) {
@@ -106,6 +100,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
 
         // Set up xTicks based on xGrain and dateRange
         const dateRangeDiff = dateRange[1].getTime() - dateRange[0].getTime();
+        let xLabsFormatSpec = '%m/%d';
         let xLabsFormat = d3.timeFormat('%m/%d');
         switch (xGrain) {
             case 'Days':
@@ -180,9 +175,10 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             switch (xGrain) {
                 case 'Days':
                     if (dateRangeDiff <= 14 * 24 * 60 * 60 * 1000) { // 14 days
-                        midpoint = day;
+                        midpoint = key;
                     } else if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
-                        midpoint = weekMidpoint;
+                        midpoint = weekStart;
+                        altLabel = d3.timeFormat('%m/%d')(new Date(weekStart));
                     } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
                         midpoint = monthStart;
                     } else {
@@ -218,7 +214,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             }
         });
 
-        return [agg_data, xPeriodMidpoints];
+        return [agg_data, xPeriodMidpoints, xLabsFormatSpec];
     }, [data, dateRange, xGrain, useMovingAverage, movingAverageWindow]);
 
     // Create scales
@@ -306,33 +302,67 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     //   (But again this is all in milliseconds, not days, so the actual numbers will be slightly different.)
     // So, we need to scale the xPeriodMidpoints range to the range of x(plotData range).
 
-    const xPeriodMidpointsScaled = (xPeriodMidpoints as xPeriodMidpoint[]).map(d => {
-        const date = new Date(d.midpoint).setHours(12);
+    const xPeriodMidpointsScaled = (xPeriodMidpoints as xPeriodMidpoint[]).map((d, i) => {
+        const date = Math.min(Math.max(new Date(d.midpoint).getTime(), plotDataMinDate), plotDataMaxDate);
         console.log('W', W);
         console.log('B', B);
         console.log('binWidth', binWidth);
         console.log('date', new Date(date));
         console.log('x.range()', x.range());
-        const scaled = (x.range()[0] + x.range()[1] * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate));
+        console.log('date', date);
+        console.log('plotDataMinDate', plotDataMinDate);
+        console.log('plotDataMaxDate', plotDataMaxDate);
+        // x[0] + (x[1]-x[0]) * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate)
+        // const scaled = (x.range()[0] + binWidth / 2 + ((x.range()[1]  - binWidth / 2) - (x.range()[0] + binWidth / 2)) * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate));
+        // try plotting the i's evenly spaced along the range
+        const scaled = (x.range()[0]) + i * binWidth;
         console.log('scaled', scaled);
         return { ...d, scaled: scaled };
     });
     console.log('xPeriodMidpoints', xPeriodMidpoints);
     console.log('xPeriodMidpointsScaled', xPeriodMidpointsScaled);
+    console.log('scaledRange', [xPeriodMidpointsScaled[0]?.scaled, xPeriodMidpointsScaled[xPeriodMidpointsScaled.length - 1]?.scaled]);
 
     // Create x-axis labels
     type xPeriodMidpointScaled = xPeriodMidpoint & { scaled: number };
     const xLabelGap = 10;
-    const xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
-        (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
-        <g key={i} transform={`translate(${x(d.midpoint)}, 0)`}>
-            <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
-            <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
-                {/* { if (d.altLabel) d.altLabel else d.formatted} */}
-                {d.altLabel ? d.altLabel : d.formatted}
-            </text>
-        </g>
-    ));
+    let xLabels = [];
+    console.log('xLabsFormatSpec', xLabsFormatSpec);
+    if ( xLabsFormatSpec == '%a') {
+        // TODO: untested. set up custom range to make testing easier.
+        xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
+            (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+            <g key={i} transform={`translate(${d.scaled}, 0)`}>
+                <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
+                <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                    {d.altLabel ? d.altLabel : d.formatted}
+                </text>
+            </g>
+        ));
+    } else {
+        if (xGrain == 'Days') {
+            xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
+                (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+                <g key={i} transform={`translate(${x(d.midpoint) + binWidth / 2}, 0)`}>
+                    <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
+                    <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                        {d.altLabel ? d.altLabel : d.formatted}
+                    </text>
+                </g>
+            ));
+
+        } else {
+            xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
+                (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+                <g key={i} transform={`translate(${x(d.midpoint)}, 0)`}>
+                    <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
+                    <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                        {d.altLabel ? d.altLabel : d.formatted}
+                    </text>
+                </g>
+            ));
+        }
+    }
 
     // Create y-axis ticks
     const yTicks = y.ticks().map((tickValue, i) => (
