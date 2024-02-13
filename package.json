@@ -35,6 +35,7 @@
     "@types/d3": "^7.4.3",
     "@types/node": "^18.14.0",
     "@types/react": "^18.2.47",
+    "@types/react-datepicker": "^4.19.6",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "autoprefixer": "^10.4.16",
