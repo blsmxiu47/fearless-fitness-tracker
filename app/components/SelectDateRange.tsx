@@ -15,7 +15,6 @@ const SelectDateRange: React.FC<SelectDateRangeProps> = ({
     endDate = new Date(),
     onChange
 }) => {
-
     return (
         <div className="relative w-full">
             <div className="relative flex items-center">

@@ -6,6 +6,7 @@ import { TimeSeriesResult } from '../../lib/types'
 
 import Card from '../components/Card'
 import SelectDropdown from '../components/SelectDropdown'
+import SelectDateRange from '../components/SelectDateRange'
 import BarTimeSeries from '../charts/BarTimeSeries'
 
 import getDistanceSummary from '../server-functions/data-processing/getDistanceSummary'
@@ -23,8 +24,9 @@ export default function Dashboard() {
     d.setDate(diff)
 
     const [dateRange, setDateRange] = useState<[Date, Date]>([d, new Date()])
-    const [rangeSelection, setRangeSelection] = useState('Past 7 Days')
-    const [customDateRange, setCustomDateRange] = useState<[Date, Date]>([new Date(), new Date()])
+    const [rangeSelection, setRangeSelection] = useState('This Week')
+    const [useCustomDateRange, setUseCustomDateRange] = useState(false)
+    const [customDateRange, setCustomDateRange] = useState<[Date, Date]>([dateRange[0], dateRange[1]])
 
     const getAggregatedData = async () => {
         const distanceSums = await getDistanceSummary()
@@ -37,10 +39,14 @@ export default function Dashboard() {
     }, [])
 
     useEffect(() => {
-        handleTimeRangeChange(rangeSelection, customDateRange)
+        handleTimeRangeChange(rangeSelection)
+    }, [rangeSelection])
+
+    useEffect(() => {
+        handleCustomDateRangeChange(customDateRange[0], customDateRange[1])
     }, [customDateRange])
 
-    const handleTimeRangeChange = (rangeSelection: string, customDateRange: [Date, Date]) => {
+    const handleTimeRangeChange = (rangeSelection: string) => {
         console.log('rangeSelection', rangeSelection)
 
         let rangeStart = new Date()
@@ -50,18 +56,22 @@ export default function Dashboard() {
                 console.log('rangeStart pre-subtract', rangeStart)
                 rangeStart.setDate(rangeStart.getDate() - 6)
                 console.log('rangeStart post-subtract', rangeStart)
+                setUseCustomDateRange(false)
                 break
             case "Past 28 Days":
                 console.log('rangeStart pre-subtract', rangeStart)
                 rangeStart.setDate(rangeStart.getDate() - 27)
                 console.log('rangeStart post-subtract', rangeStart)
+                setUseCustomDateRange(false)
                 break
             case "Past Year":
                 rangeStart.setFullYear(rangeStart.getFullYear() - 1)
                 rangeStart.setDate(rangeStart.getDate() + 1)
+                setUseCustomDateRange(false)
                 break
             case "All Time":
                 rangeStart = new Date(1900, 0, 0)
+                setUseCustomDateRange(false)
                 break
             case "This Week":
                 const day = rangeStart.getDay()
@@ -69,18 +79,28 @@ export default function Dashboard() {
                 // This is a bug in the brain, not the code, but nevertheless, add handling of user-set preferences
                 const diff = rangeStart.getDate() - day + (day == 0 ? -6 : 1)
                 rangeStart.setDate(diff)
+                setUseCustomDateRange(false)
                 break
             case "This Month":
                 rangeStart.setDate(1)
+                setUseCustomDateRange(false)
                 break
             case "This Year":
                 rangeStart.setMonth(0, 1)
                 console.log('rangeStart', rangeStart)
+                setUseCustomDateRange(false)
                 break
             case "Custom Range":
-                rangeStart = customDateRange[0]
-                rangeEnd = customDateRange[1]
+                // rangeStart = customDateRange[0]
+                // rangeEnd = customDateRange[1]
+                // TODO: for some reason setting timeRange to Custom Range causes the dateRange to be set to the current date.
+                // Must be that this handleTimeRangeChange() function is being called when the selectDropdown option changes, and when rangeStart and rangeEnd are not manually updated within this switch statement, the dateRange is set to the current date.
+                // The intended behavior is that the dateRange would not change when the rangeSelection is set to Custom Range.
+                rangeStart = dateRange[0]
+                rangeEnd = dateRange[1]
+                console.log('range seleciton is Custom Range', rangeSelection)
                 console.log('Custom Range rangeStart rangeEnd', rangeStart, rangeEnd)
+                setUseCustomDateRange(true)
                 break
         }
 
@@ -101,7 +121,13 @@ export default function Dashboard() {
     }
 
     const handleTimeUnitChange = (unitSelection: string) => {
+        console.log('unitSelection', unitSelection)
         setTimeUnit(unitSelection as 'Days' | 'Weeks' | 'Months' | 'Years')
+    }
+
+    const handleCustomDateRangeChange = (startDate: Date, endDate: Date) => {
+        console.log('startDate, endDate', startDate, endDate)
+        setDateRange([startDate, endDate])
     }
 
     return (
@@ -110,13 +136,21 @@ export default function Dashboard() {
                 <div className="w-[11rem]">
                     <SelectDropdown
                         label='Time Range'
-                        defaultOption='Past 7 Days'
+                        defaultOption='This Week'
                         optionGroups={[
                             [1, ['Past 7 Days', 'Past 28 Days', 'Past Year', 'All Time']],
                             [2, ['This Week', 'This Month', 'This Year']],
                             [3, ['Custom Range']]
                         ]}
-                        onChange={(rangeSelection) => handleTimeRangeChange(rangeSelection, customDateRange)}
+                        onChange={(rangeSelection) => handleTimeRangeChange(rangeSelection)}
+                    />
+                </div>
+                <div className="w-[11rem]">
+                    <SelectDateRange
+                        customRange={useCustomDateRange}
+                        startDate={dateRange[0]}
+                        endDate={dateRange[1]}
+                        onChange={(startDate, endDate) => setCustomDateRange([startDate, endDate])}
                     />
                 </div>
                 <div className="w-[11rem]">
