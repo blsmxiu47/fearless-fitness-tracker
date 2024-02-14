@@ -91,11 +91,6 @@ export default function Dashboard() {
                 setUseCustomDateRange(false)
                 break
             case "Custom Range":
-                // rangeStart = customDateRange[0]
-                // rangeEnd = customDateRange[1]
-                // TODO: for some reason setting timeRange to Custom Range causes the dateRange to be set to the current date.
-                // Must be that this handleTimeRangeChange() function is being called when the selectDropdown option changes, and when rangeStart and rangeEnd are not manually updated within this switch statement, the dateRange is set to the current date.
-                // The intended behavior is that the dateRange would not change when the rangeSelection is set to Custom Range.
                 rangeStart = dateRange[0]
                 rangeEnd = dateRange[1]
                 console.log('range seleciton is Custom Range', rangeSelection)
