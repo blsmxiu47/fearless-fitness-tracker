@@ -85,7 +85,15 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         const dateGrainMap = {
             'Days': (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate(), 12),
             // midways through the week, so midday Wednesday
-            'Weeks': (x: Date) => new Date(d3.timeWednesday(x).setHours(12)),
+            'Weeks': (x: Date) => {
+                const wednesdayBefore = d3.timeWednesday.floor(x);
+                const wednesdayAfter = d3.timeWednesday.ceil(x);
+                if ((x.getTime() - wednesdayBefore.getTime()) < (wednesdayAfter.getTime() - x.getTime())) {
+                    return new Date(wednesdayBefore.setHours(12, 0, 0, 0));
+                } else {
+                    return new Date(wednesdayAfter.setHours(12, 0, 0, 0));
+                }
+            },
             'Months': (x: Date) => new Date(d3.timeMonth(x).setDate(15)),
             'Years': (x: Date) => new Date(x.getFullYear(), 6, 1),
         };
@@ -306,7 +314,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     // So, we need to scale the xPeriodMidpoints range to the range of x(plotData range).
 
     const xPeriodMidpointsScaled = (xPeriodMidpoints as xPeriodMidpoint[]).map((d, i) => {
-        const date = Math.min(Math.max(new Date(d.midpoint).getTime(), plotDataMinDate), plotDataMaxDate);
+        // const date = Math.min(Math.max(new Date(d.midpoint).getTime(), plotDataMinDate), plotDataMaxDate);
         // x[0] + (x[1]-x[0]) * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate)
         // const scaled = (x.range()[0] + binWidth / 2 + ((x.range()[1]  - binWidth / 2) - (x.range()[0] + binWidth / 2)) * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate));
         // try plotting the i's evenly spaced along the range
