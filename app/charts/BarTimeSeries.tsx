@@ -328,7 +328,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     let xLabels = [];
     if ( xLabsFormatSpec == '%a') {
         xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
-            (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+            (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
             <g key={i} transform={`translate(${d.scaled}, 0)`}>
                 <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
                 <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
@@ -337,9 +337,9 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             </g>
         ));
     } else {
-        if (xGrain == 'Days') {
+        if (xGrain == 'Days' && xPeriodMidpointsScaled.length < 62) {
             xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
-                (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+                (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
                 <g key={i} transform={`translate(${x(d.midpoint) + binWidth / 2}, 0)`}>
                     <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
                     <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
@@ -350,7 +350,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
 
         } else {
             xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
-                (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
+                (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
                 <g key={i} transform={`translate(${x(d.midpoint)}, 0)`}>
                     <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" />
                     <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
