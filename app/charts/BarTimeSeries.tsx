@@ -62,25 +62,31 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     movingAverageWindow = 7
 }) => {
     const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
-
     const [plotData, xPeriodMidpoints, xLabsFormatSpec] = useMemo(() => {
         if (dateRange.length != 2) {
-            return [[], d3.timeFormat('%Y')];
+            return [[], [], d3.timeFormat('%Y')];
         }
+        dateRange[0].setHours(0, 0, 0, 0);
+        dateRange[1].setHours(23, 59, 59, 999);
 
         // Filter data by date range
-        data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
         const today = new Date();
         const maxDate = d3.max(data, d => d.date);
         const missingToDate = d3.timeDays(maxDate!, today);
         const missingData = missingToDate.map(date => ({ date, value: 0 }));
         data = data.concat(missingData);
+        data = data.filter(d => d.date >= dateRange[0] && d.date <= dateRange[1]);
+
+        // if there's no data, return early
+        if (data.length === 0) {
+            return [[], [], d3.timeFormat('%Y')];
+        }
 
         const dateGrainMap = {
             'Days': (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate(), 12),
             // midways through the week, so midday Wednesday
-            'Weeks': (x: Date) => { return new Date(d3.timeWednesday(x).setHours(12)); },
-            'Months': (x: Date) => { return new Date(d3.timeMonth(x).setDate(15)); },
+            'Weeks': (x: Date) => new Date(d3.timeWednesday(x).setHours(12)),
+            'Months': (x: Date) => new Date(d3.timeMonth(x).setDate(15)),
             'Years': (x: Date) => new Date(x.getFullYear(), 6, 1),
         };
         const dateGrainFunc = dateGrainMap[xGrain];
@@ -246,6 +252,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         outline_width = 0;
     }
     const bars = plotData.map((d, i) => (
+        // don't draw bars with a value of 0
+        d.value > 0 &&
         <rect
             key={i}
             x={marginLeft + W / B / 8 + i * binWidth}
@@ -287,11 +295,6 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     // In order to accurately place the x-axis labels, we need to map the range of xPeriodMidpoints to the range of x(plotData range)
     const plotDataMinDate = d3.min(plotData, d => d.date)?.getTime() || new Date().getTime();
     const plotDataMaxDate = d3.max(plotData, d => d.date)?.getTime() || new Date().getTime();
-    console.log('plotDataMinDate', new Date(plotDataMinDate));
-    console.log('plotDataMaxDate', new Date(plotDataMaxDate));
-    console.log('xGrain', xGrain);
-    console.log('plotData.length', plotData.length);
-    console.log('xLabsFormatSpec', xLabsFormatSpec);
     // So, if the range of x(plotData range) is [2024-01-14, 2024-04-10], the range of xPeriodMidpoints is [2024-01-01, 2024-04-01], 
     // and x range is [40, 600].
     // so extent of x is 600 - 40 = 560, and extent of plotData is 2024-04-10 - 2024-01-14 = 86 days (though it will actually be in milliseconds).
@@ -304,32 +307,18 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
 
     const xPeriodMidpointsScaled = (xPeriodMidpoints as xPeriodMidpoint[]).map((d, i) => {
         const date = Math.min(Math.max(new Date(d.midpoint).getTime(), plotDataMinDate), plotDataMaxDate);
-        console.log('W', W);
-        console.log('B', B);
-        console.log('binWidth', binWidth);
-        console.log('date', new Date(date));
-        console.log('x.range()', x.range());
-        console.log('date', date);
-        console.log('plotDataMinDate', plotDataMinDate);
-        console.log('plotDataMaxDate', plotDataMaxDate);
         // x[0] + (x[1]-x[0]) * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate)
         // const scaled = (x.range()[0] + binWidth / 2 + ((x.range()[1]  - binWidth / 2) - (x.range()[0] + binWidth / 2)) * (date - plotDataMinDate) / (plotDataMaxDate - plotDataMinDate));
         // try plotting the i's evenly spaced along the range
         const scaled = (x.range()[0]) + i * binWidth;
-        console.log('scaled', scaled);
         return { ...d, scaled: scaled };
     });
-    console.log('xPeriodMidpoints', xPeriodMidpoints);
-    console.log('xPeriodMidpointsScaled', xPeriodMidpointsScaled);
-    console.log('scaledRange', [xPeriodMidpointsScaled[0]?.scaled, xPeriodMidpointsScaled[xPeriodMidpointsScaled.length - 1]?.scaled]);
 
     // Create x-axis labels
     type xPeriodMidpointScaled = xPeriodMidpoint & { scaled: number };
     const xLabelGap = 10;
     let xLabels = [];
-    console.log('xLabsFormatSpec', xLabsFormatSpec);
     if ( xLabsFormatSpec == '%a') {
-        // TODO: untested. set up custom range to make testing easier.
         xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
             (d.midpoint >= x.domain()[0].getTime() && d.midpoint <= x.domain()[1].getTime()) &&
             <g key={i} transform={`translate(${d.scaled}, 0)`}>
