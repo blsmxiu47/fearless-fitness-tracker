@@ -54,7 +54,7 @@ export default function Dashboard() {
         switch (rangeSelection) {
             case "Past 7 Days":
                 console.log('rangeStart pre-subtract', rangeStart)
-                rangeStart.setDate(rangeStart.getDate() - 7)
+                rangeStart.setDate(rangeStart.getDate() - 6)
                 console.log('rangeStart post-subtract', rangeStart)
                 setUseCustomDateRange(false)
                 break
@@ -74,11 +74,9 @@ export default function Dashboard() {
                 setUseCustomDateRange(false)
                 break
             case "This Week":
-                const monday = rangeStart.getDay() % 7
                 // TODO: some people may not consider Monday as the first day of the week. 
                 // This is a bug in the brain, not the code, but nevertheless, add handling of user-set preferences
-                const diff = rangeStart.getDate() - monday
-                rangeStart.setDate(diff)
+                rangeStart.setDate(rangeStart.getDate() - (rangeStart.getDay() - 1))
                 setUseCustomDateRange(false)
                 break
             case "This Month":
