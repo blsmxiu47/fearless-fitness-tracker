@@ -121,7 +121,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                 if (dateRangeDiff <= 7 * 24 * 60 * 60 * 1000) { // 7 days
                     xLabsFormatSpec = '%a';
                     xLabsFormat = d3.timeFormat(xLabsFormatSpec);
-                } else if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
+                } else if (dateRangeDiff <= 62 * 24 * 60 * 60 * 1000) { // 62 days
                     xLabsFormatSpec = '%m/%d';
                     xLabsFormat = d3.timeFormat('%m/%d');
                 } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
@@ -133,7 +133,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                 }
                 break;
             case 'Weeks':
-                if (dateRangeDiff <= 180 * 24 * 60 * 60 * 1000) { // 180 days
+                if (dateRangeDiff <= 183 * 24 * 60 * 60 * 1000) { // 183 days
                     xLabsFormatSpec = '%m/%d';
                     xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
@@ -190,7 +190,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                 case 'Days':
                     if (dateRangeDiff <= 14 * 24 * 60 * 60 * 1000) { // 14 days
                         midpoint = key;
-                    } else if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
+                    } else if (dateRangeDiff <= 62 * 24 * 60 * 60 * 1000) { // 62 days
                         midpoint = weekStart;
                         altLabel = d3.timeFormat('%m/%d')(new Date(weekStart));
                     } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
@@ -200,7 +200,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                     }
                     break;
                 case 'Weeks':
-                    if (dateRangeDiff <= 60 * 24 * 60 * 60 * 1000) { // 60 days
+                    if (dateRangeDiff <= 62 * 24 * 60 * 60 * 1000) { // 62 days
                         midpoint = weekMidpoint;
                         altLabel = d3.timeFormat('%m/%d')(new Date(weekStart));
                     } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
