@@ -32,6 +32,10 @@ type xPeriodMidpoint = {
     altLabel: string | null;
 };
 
+const dayGrainYearMonthLabelMaxDays = 62;
+const weekGrainYearMonthLabelMaxDays = 183;
+const millisecondsPerDay = 24 * 60 * 60 * 1000;
+
 function simpleMovingAverage(values: number[], window: number) {
     if (!values || values.length < window) {
         return [];
@@ -118,13 +122,13 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         let xLabsFormat = d3.timeFormat('%m/%d');
         switch (xGrain) {
             case 'Days':
-                if (dateRangeDiff <= 7 * 24 * 60 * 60 * 1000) { // 7 days
+                if (dateRangeDiff <= 7 * millisecondsPerDay) { // 7 days
                     xLabsFormatSpec = '%a';
                     xLabsFormat = d3.timeFormat(xLabsFormatSpec);
-                } else if (dateRangeDiff <= 62 * 24 * 60 * 60 * 1000) { // 62 days
+                } else if (dateRangeDiff <= dayGrainYearMonthLabelMaxDays * millisecondsPerDay) { // dayGrainYearMonthLabelMaxDays days
                     xLabsFormatSpec = '%m/%d';
                     xLabsFormat = d3.timeFormat('%m/%d');
-                } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                } else if (dateRangeDiff <= 2 * 365 * millisecondsPerDay) { // 2 years
                     xLabsFormatSpec = '%b';
                     xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else {
@@ -133,10 +137,10 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                 }
                 break;
             case 'Weeks':
-                if (dateRangeDiff <= 183 * 24 * 60 * 60 * 1000) { // 183 days
+                if (dateRangeDiff <= weekGrainYearMonthLabelMaxDays * millisecondsPerDay) { // weekGrainYearMonthLabelMaxDays days
                     xLabsFormatSpec = '%m/%d';
                     xLabsFormat = d3.timeFormat(xLabsFormatSpec);
-                } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                } else if (dateRangeDiff <= 2 * 365 * millisecondsPerDay) { // 2 years
                     xLabsFormatSpec = '%b';
                     xLabsFormat = d3.timeFormat(xLabsFormatSpec);
                 } else {
@@ -145,7 +149,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
                 }
                 break;
             case 'Months':
-                if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                if (dateRangeDiff <= 2 * 365 * millisecondsPerDay) { // 2 years
                     xLabsFormatSpec = '%b';
                     xLabsFormat = d3.timeFormat('%b');
                 } else {
@@ -188,29 +192,29 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             let altLabel = null;
             switch (xGrain) {
                 case 'Days':
-                    if (dateRangeDiff <= 14 * 24 * 60 * 60 * 1000) { // 14 days
+                    if (dateRangeDiff <= 14 * millisecondsPerDay) { // 14 days
                         midpoint = key;
-                    } else if (dateRangeDiff <= 62 * 24 * 60 * 60 * 1000) { // 62 days
+                    } else if (dateRangeDiff <= dayGrainYearMonthLabelMaxDays * millisecondsPerDay) { // dayGrainYearMonthLabelMaxDays days
                         midpoint = weekStart;
                         altLabel = d3.timeFormat('%m/%d')(new Date(weekStart));
-                    } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                    } else if (dateRangeDiff <= 2 * 365 * millisecondsPerDay) { // 2 years
                         midpoint = monthStart;
                     } else {
                         midpoint = yearStart;
                     }
                     break;
                 case 'Weeks':
-                    if (dateRangeDiff <= 62 * 24 * 60 * 60 * 1000) { // 62 days
+                    if (dateRangeDiff <= dayGrainYearMonthLabelMaxDays * millisecondsPerDay) { // dayGrainYearMonthLabelMaxDays days
                         midpoint = weekMidpoint;
                         altLabel = d3.timeFormat('%m/%d')(new Date(weekStart));
-                    } else if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                    } else if (dateRangeDiff <= 2 * 365 * millisecondsPerDay) { // 2 years
                         midpoint = monthStart;
                     } else {
                         midpoint = yearStart;
                     }
                     break;
                 case 'Months':
-                    if (dateRangeDiff <= 2 * 365 * 24 * 60 * 60 * 1000) { // 2 years
+                    if (dateRangeDiff <= 2 * 365 * millisecondsPerDay) { // 2 years
                         midpoint = monthMidpoint;
                     } else {
                         midpoint = yearStart;
@@ -337,7 +341,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             </g>
         ));
     } else {
-        if (xGrain == 'Days' && xPeriodMidpointsScaled.length < 62) {
+        if (xGrain == 'Days' && xPeriodMidpointsScaled.length < dayGrainYearMonthLabelMaxDays) {
             xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
                 (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
                 <g key={i} transform={`translate(${x(d.midpoint) + binWidth / 2}, 0)`}>
