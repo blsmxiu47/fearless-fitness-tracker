@@ -2,8 +2,6 @@
 
 ## Dev ToDos
 
-* add global css variables for colors, fonts, etc.
-* create an example user in the fft DB with realistic running data to design around and test views/charts
 * Constrain and handle user import/input of data that exceeds hard data-related limits e.g. max value for integer and bigint fields in the db (e.g. users should not be allowed to enter a workout duration of 100 years, for example, if we store the duration as an INTEGER value in seconds)
 * implement 2-3 dashboard visuals using mock user data
   * take screenshots when ready
@@ -23,9 +21,9 @@
     * Implement progress bar for upload(?)
 * implement user authentication
 * clean up styles, etc. of the above pages
-* host DB and app.. somewhere.. tbd.. for no cost plz
+* host DB and app.. somewhere
 * clean up and organize code
-* publish and make repo public
+* publish
 ...
 * ...add a non-main branch and continue adding features and improving the (now-published) app as time permits
   * "Running" view with input table including fields for session a, b, other a, other b, distance, time, elevation gain, zones 1-5, TI (calculated), weekly sums, moving average fields, etc.
