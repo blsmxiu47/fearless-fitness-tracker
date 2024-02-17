@@ -16,12 +16,14 @@
   --accent-3: #5ABAB7;
   --theme-light-bg: rgb(249, 250, 251);
   --theme-light-bg-2: rgb(3, 7, 18);
+  --theme-light-border: rgb(3, 7, 18);
   --theme-light-text: rgb(17, 24, 39);
   --theme-light-text-hover: rgb(17, 24, 39);
   --theme-light-text-2: rgb(249, 250, 251);
   --theme-light-text-2-hover: rgb(249, 250, 251);
   --theme-dark-bg: rgb(17, 24, 39);
   --theme-dark-bg-2: rgb(31, 41, 55);
+  --theme-dark-border: rgb(55, 65, 81);
   --theme-dark-text: rgb(249, 250, 251);
   --theme-dark-text-hover: rgb(249, 250, 251);
 }
