@@ -15,7 +15,7 @@ export default function Sidebar() {
     const userMenuRef = useRef<HTMLDivElement>(null);
 
     const handleClickOutside = (e: MouseEvent) => {
-        if (userMenu && userMenuRef.current && !userMenuRef.current?.contains(e.target as Node)) {
+        if (userMenu && userMenuRef.current && !userMenuRef.current?.contains(e.target as Node) && e.currentTarget !== document.getElementById('user-menu-button') && e.target !== document.getElementById('user-menu-button-img')) {
             setUserMenu(false);
         }
     }
@@ -49,10 +49,10 @@ export default function Sidebar() {
                             <div>
                                 <button type="button" id="user-menu-button" className="flex text-sm bg-[var(--theme-light-bg-2)] dark:bg-[var(--theme-dark-bg-2)] rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" aria-expanded="true" aria-haspopup="true" onClick={() => setUserMenu(!userMenu)}>
                                     <span className="sr-only">Open user menu</span>
-                                    <img className="w-8 h-8 rounded-full" src="https://placeholder.pics/svg/300" alt="user photo" />
+                                    <img id="user-menu-button-img" className="w-8 h-8 rounded-full" src="https://placeholder.pics/svg/300" alt="user photo" />
                                 </button>
                             </div>
-                            <div ref={userMenuRef} className={`z-50 absolute origin-top-right right-0 top-14 py-4 px-2 text-base list-none divide-y divide-gray-100 rounded shadow bg-[var(--theme-light-bg-2)] dark:bg-[var(--theme-dark-bg-2)] dark:divide-gray-600 ${userMenu ? "" : "hidden"}`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
+                            <div ref={userMenuRef} className={`z-50 absolute origin-top-right right-0 top-14 py-4 px-2 text-base list-none divide-y divide-gray-100 border border-[var(--theme-light-border)] dark:border-[var(--theme-dark-border)] rounded-b shadow bg-[var(--theme-light-bg-2)] dark:bg-[var(--theme-dark-bg-2)] dark:divide-gray-600 ${userMenu ? "" : "hidden"}`} role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex={-1}>
                                 <div className="px-4 py-3" role="none">
                                     <p className="text-sm text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)]" role="none">
                                         userName from DB
@@ -87,7 +87,7 @@ export default function Sidebar() {
         </nav>
 
         <aside className={`fixed top-0 left-0 z-40 h-full pt-20 bg-[var(--theme-light-bg-2)] border-r border-[var(--theme-light-border)] duration-200 sm:translate-x-0 dark:bg-[var(--theme-dark-bg-2)] dark:border-[var(--theme-dark-border)] ${isSidebarOpen ? "w-64" : "-left-10 sm:left-0 w-0 sm:w-16"}`} aria-label="Sidebar">
-            <img src="https://placeholder.pics/svg/300" className={`hidden sm:block absolute z-50 cursor-pointer -right-3 top-16 w-7 border- dark:border-[var(--theme-dark-border)] border-2 rounded-full  ${!isSidebarOpen && "rotate-180"}`} onClick={() => toggleSidebar()}
+            <img src="https://placeholder.pics/svg/300" className={`hidden sm:block absolute z-50 cursor-pointer -right-3 top-16 w-7 border-[var(--theme-light-border)] dark:border-[var(--theme-dark-border)] border-2 rounded-full  ${!isSidebarOpen && "rotate-180"}`} onClick={() => toggleSidebar()}
             />
             <div className={`h-full pt-2 px-3 pb-4 overflow-y-hidden bg-[var(--theme-light-bg-2)] dark:bg-[var(--theme-dark-bg-2)] ${isSidebarOpen ? "block" : "hidden sm:block"}`}>
                 <ul className="font-medium">
