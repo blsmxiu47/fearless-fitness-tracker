@@ -3,36 +3,9 @@
 import { useMemo, useState } from 'react'
 import * as d3 from 'd3';
 
-import { TimeSeriesResult } from '../../lib/types';
+import { BarTimeSeriesProps, TextAnchor, TimeSeriesResult, xPeriodMidpoint } from '../../lib/types'
 
 import Tooltip from './Tooltip';
-
-type TextAnchor = 'start' | 'middle' | 'end';
-
-type xGrain = 'Days' | 'Weeks' | 'Months' | 'Years';
-
-type BarTimeSeriesProps = {
-    data: TimeSeriesResult[];
-    xLabels?: string[];
-    yLabels?: string[];
-    width?: number;
-    height?: number;
-    marginTop?: number;
-    marginRight?: number;
-    marginBottom?: number;
-    marginLeft?: number;
-    dateRange?: [Date, Date];
-    xGrain?: xGrain;
-    useMovingAverage?: boolean;
-    movingAverageWindow?: number;
-};
-
-type xPeriodMidpoint = {
-    original: number;
-    midpoint: number;
-    formatted: string;
-    altLabel: string | null;
-};
 
 const dayGrainYearMonthLabelMaxDays = 62;
 const weekGrainYearMonthLabelMaxDays = 183;

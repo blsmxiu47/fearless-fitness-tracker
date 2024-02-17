@@ -182,3 +182,31 @@ export type Workout = {
     type: Type
     user: User
 }
+
+// BarTimeSeries
+export type TextAnchor = 'start' | 'middle' | 'end';
+
+export type xGrain = 'Days' | 'Weeks' | 'Months' | 'Years';
+
+export type BarTimeSeriesProps = {
+    data: TimeSeriesResult[];
+    xLabels?: string[];
+    yLabels?: string[];
+    width?: number;
+    height?: number;
+    marginTop?: number;
+    marginRight?: number;
+    marginBottom?: number;
+    marginLeft?: number;
+    dateRange?: [Date, Date];
+    xGrain?: xGrain;
+    useMovingAverage?: boolean;
+    movingAverageWindow?: number;
+};
+
+export type xPeriodMidpoint = {
+    original: number;
+    midpoint: number;
+    formatted: string;
+    altLabel: string | null;
+};
