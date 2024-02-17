@@ -10,7 +10,7 @@ export default function RootLayout({
     return (
         <SidebarProvider>
             <html lang="en">
-                <body className="bg-white dark:bg-gray-900 dark:text-white">
+                <body className="bg-[var(--theme-light-bg)] dark:bg-[var(--theme-dark-bg)] text-[var(--theme-light-text)] dark:text-[var(--theme-dark-text)]">
                     <Sidebar />
                     <main className="container mx-auto py-14 px-4">
                         <Layout>
