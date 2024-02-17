@@ -7,6 +7,8 @@ import { TimeSeriesResult } from '../../lib/types';
 
 import Tooltip from './Tooltip';
 
+type TextAnchor = 'start' | 'middle' | 'end';
+
 type xGrain = 'Days' | 'Weeks' | 'Months' | 'Years';
 
 type BarTimeSeriesProps = {
@@ -65,6 +67,31 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     useMovingAverage = false,
     movingAverageWindow = 7
 }) => {
+    const [isDarkScheme, setIsDarkScheme] = useState(false);
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setIsDarkScheme(true);
+    }
+
+    // Conditional styling for all ticks and labels
+    const theme = isDarkScheme ? 'dark' : 'light';
+    console.log('theme', theme);
+    const strokeColor = theme === 'dark' ? 'white' : 'black';
+    const fillColor = theme === 'dark' ? 'white' : 'black';
+    const ticksStyle = {
+        fill: strokeColor,
+        font: '11px Arial',
+    };
+    const xLabelsStyle = {
+        textAnchor: 'middle' as TextAnchor,
+        font: '11px Arial',
+        fill: fillColor,
+    }
+    const yLabelsStyle = {
+        textAnchor: 'end' as TextAnchor,
+        font: '11px Arial',
+        fill: fillColor,
+    }
+
     const [hoveredData, setHoveredData] = useState<TimeSeriesResult | null>(null);
     const [plotData, xPeriodMidpoints, xLabsFormatSpec] = useMemo(() => {
         if (dateRange.length != 2) {
@@ -295,7 +322,7 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     // B+1 xTicks
     const xTicks = [...Array(B + 1)].map((d, i) => (
         <g key={i} transform={`translate(${marginLeft + i * binWidth}, 0)`}>
-            <line y1={0} y2={xTicksHeight} stroke="white" />
+            <line y1={0} y2={xTicksHeight} stroke={strokeColor} />
         </g>
     ));
 
@@ -334,8 +361,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
             (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
             <g key={i} transform={`translate(${d.scaled}, 0)`}>
-                {/* <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" /> */}
-                <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                {/* <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke={strokeColor} /> */}
+                <text style={xLabelsStyle} dy=".71em">
                     {d.altLabel ? d.altLabel : d.formatted}
                 </text>
             </g>
@@ -345,8 +372,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
                 (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
                 <g key={i} transform={`translate(${x(d.midpoint) + binWidth / 2}, 0)`}>
-                    {/* <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" /> */}
-                    <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                    {/* <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke={strokeColor} /> */}
+                    <text style={xLabelsStyle} dy=".71em">
                         {d.altLabel ? d.altLabel : d.formatted}
                     </text>
                 </g>
@@ -356,8 +383,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             xLabels = (xPeriodMidpointsScaled as xPeriodMidpointScaled[]).map((d, i) => (
                 (d.midpoint >= x.domain()[0].setHours(0,0,0,0) && d.midpoint <= x.domain()[1].setHours(23,59,59,999)) &&
                 <g key={i} transform={`translate(${x(d.midpoint)}, 0)`}>
-                    {/* <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke="white" /> */}
-                    <text style={{ textAnchor: 'middle', font: '11px Arial', fill: 'white' }} dy=".71em">
+                    {/* <line y1={-xLabelGap} y2={xTicksHeight * 2} stroke={strokeColor} /> */}
+                    <text style={xLabelsStyle} dy=".71em">
                         {d.altLabel ? d.altLabel : d.formatted}
                     </text>
                 </g>
@@ -368,8 +395,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     // Create y-axis ticks
     const yTicks = y.ticks().map((tickValue, i) => (
         <g key={i} transform={`translate(0, ${y(tickValue)})`}>
-            <line x2={width - marginLeft - marginRight} stroke="white" strokeOpacity={0.2} />
-            <text style={{ textAnchor: 'end', font: '11px Arial', fill: 'white' }} x={-10} dx=".16em">
+            <line x2={width - marginLeft - marginRight} stroke={strokeColor} strokeOpacity={0.2} />
+            <text style={yLabelsStyle} x={-10} dx=".16em">
                 {tickValue}
             </text>
         </g>
@@ -379,13 +406,13 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         <div>
             <svg width={width} height={height} style={{ maxWidth: '100%', height: 'auto' }} preserveAspectRatio='xMinYMin meet'>
                 <g>
-                    <g transform={`translate(0, ${height - marginBottom})`} style={{ font: '11px Arial', fill: 'white' }}>
+                    <g transform={`translate(0, ${height - marginBottom})`} style={ticksStyle}>
                         {xTicks}
                     </g>
-                    <g transform={`translate(0, ${height - marginBottom + xLabelGap})`} style={{ font: '11px Arial', fill: 'white' }}>
+                    <g className="" transform={`translate(0, ${height - marginBottom + xLabelGap})`} style={ticksStyle}>
                         {xLabels}
                     </g>
-                    <g transform={`translate(${marginLeft}, 0)`} style={{ font: '11px Arial', fill: 'white' }}>
+                    <g transform={`translate(${marginLeft}, 0)`} style={ticksStyle}>
                         {yTicks}
                     </g>
                     {bars}
