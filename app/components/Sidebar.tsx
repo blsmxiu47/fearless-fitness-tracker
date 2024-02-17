@@ -33,7 +33,7 @@ export default function Sidebar() {
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start rtl:justify-end">
-                        <button aria-controls="toggle-sidebar" type="button" className="inline-flex items-center p-1 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" onClick={() => toggleSidebar()}>
+                        <button aria-controls="toggle-sidebar" type="button" className="inline-flex items-center p-1 text-sm text-gray-500 rounded-lg sm:hidden hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" onClick={() => toggleSidebar()}>
                             <span className="sr-only">Open sidebar</span>
                             <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path clipRule="evenodd" fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
@@ -63,18 +63,18 @@ export default function Sidebar() {
                                 </div>
                                 <ul className="py-1" role="none">
                                     <li>
-                                        <Link href="/profile" className="block px-4 py-2 text-sm hover:bg-gray-100 text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-0" onClick={() => setUserMenu(false)}>
+                                        <Link href="/profile" className="block px-4 py-2 text-sm text-[var(--theme-light-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:text-[var(--theme-dark-text-2)] dark:hover:text-var[(--theme-dark-text-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)]" role="menuitem" tabIndex={-1} id="menu-item-0" onClick={() => setUserMenu(false)}>
                                             <span className="flex items-center"><LuUser2 className="mr-1" />View Profile</span>
                                             
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/account-settings" className="inline-block align-middle px-4 py-2 text-sm text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-1" onClick={() => setUserMenu(false)}>
+                                        <Link href="/account-settings" className="inline-block align-middle px-4 py-2 text-sm text-[var(--theme-light-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:text-[var(--theme-dark-text-2)] dark:hover:text-var[(--theme-dark-text-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)]" role="menuitem" tabIndex={-1} id="menu-item-1" onClick={() => setUserMenu(false)}>
                                             <span className="flex items-center"><GoGear className="mr-1" />Account Settings</span>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/logout" className="block px-4 py-2 text-sm text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem" tabIndex={-1} id="menu-item-3" onClick={() => setUserMenu(false)}>
+                                        <Link href="/logout" className="block px-4 py-2 text-sm text-[var(--theme-light-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:text-[var(--theme-dark-text-2)] dark:hover:text-var[(--theme-dark-text-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)]" role="menuitem" tabIndex={-1} id="menu-item-3" onClick={() => setUserMenu(false)}>
                                             <span className="flex items-center"><MdLogout className="mr-1" />Sign Out</span>
                                         </Link>
                                     </li>
@@ -92,50 +92,44 @@ export default function Sidebar() {
             <div className={`h-full pt-2 px-3 pb-4 overflow-y-hidden bg-[var(--theme-light-bg-2)] dark:bg-[var(--theme-dark-bg-2)] ${isSidebarOpen ? "block" : "hidden sm:block"}`}>
                 <ul className="font-medium">
                     <li className="py-2">
-                        <Link href="/dashboard" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <MdOutlineSpaceDashboard className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <Link href="/dashboard" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <MdOutlineSpaceDashboard className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Dashboard</span>
                         </Link>
                     </li>
                     <li className="py-2">
-                        <a href="/my-sessions" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <MdOutlineStackedLineChart className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <a href="/my-sessions" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <MdOutlineStackedLineChart className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>My Sessions</span>
                         </a>
                     </li>
                     <li className="py-2">
-                        <a href="/calendar" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <MdOutlineCalendarMonth className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <a href="/calendar" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <MdOutlineCalendarMonth className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "translate-x-0": "-translate-x-full opacity-0"}`}>Calendar</span>
                         </a>
                     </li>
                     <li className="py-2">
-                        <a href="/build-routine" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <LuHammer className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <a href="/build-routine" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <LuHammer className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "translate-x-0": "-translate-x-full opacity-0"}`}>Build Routine</span>
                         </a>
                     </li>
                     <li className="py-2">
-                        <a href="/explore" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <FaMagnifyingGlass className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <a href="/explore" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <FaMagnifyingGlass className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Explore</span>
                         </a>
                     </li>
                     <li className="py-2">
-                        <a href="/reports" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <HiOutlineDocumentReport className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <a href="/reports" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <HiOutlineDocumentReport className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "translate-x-0": "-translate-x-full opacity-0"}`}>Reports</span>
                         </a>
                     </li>
-                    {/* <li>
-                        <a href="/preferences" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <LuWrench className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                            <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Preferences</span>
-                        </a>
-                    </li> */}
                     <li className="py-2">
-                        <a href="/import-data" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:bg-gray-100 dark:hover:bg-gray-700 group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
-                            <LuImport className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                        <a href="/import-data" className="flex items-center p-2 rounded-lg text-[var(--theme-light-text-2)] dark:text-[var(--theme-dark-text-2)] hover:text-[var(--theme-light-text-2-hover)] hover:bg-[var(--theme-light-bg-2-hover)] dark:hover:bg-[var(--theme-dark-bg-2-hover)] group focus:outline-none focus:ring-2 focus:ring-[var(--primary)]">
+                            <LuImport className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                             <span className={`inline-flex items-center ms-3 h-5 transition-all overflow-clip ${isSidebarOpen? "-translate-x-0": "-translate-x-full opacity-0"}`}>Import Data</span>
                         </a>
                     </li>
