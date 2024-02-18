@@ -40,18 +40,14 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
     useMovingAverage = false,
     movingAverageWindow = 7
 }) => {
-    const [isDarkScheme, setIsDarkScheme] = useState(false);
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setIsDarkScheme(true);
-    }
+    const [isDarkScheme, setIsDarkScheme] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches ? true : false);
 
     // Conditional styling for all ticks and labels
     const theme = isDarkScheme ? 'dark' : 'light';
-    console.log('theme', theme);
     const strokeColor = theme === 'dark' ? 'white' : 'black';
     const fillColor = theme === 'dark' ? 'white' : 'black';
     const ticksStyle = {
-        fill: strokeColor,
+        fill: fillColor,
         font: '11px Arial',
     };
     const xLabelsStyle = {
@@ -253,15 +249,15 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
         .range([height - marginBottom, marginTop]);
     
     // Create bars
-    let outline_width = 0.2;
+    let outlineWidth = 0.2;
     if (plotData.length < 200) {
-        outline_width = 0.1;
+        outlineWidth = 0.1;
     } else if (plotData.length < 300) {
-        outline_width = 0.05;
+        outlineWidth = 0.05;
     } else if (plotData.length < 1000) {
-        outline_width = 0.01;
+        outlineWidth = 0.01;
     } else {
-        outline_width = 0;
+        outlineWidth = 0;
     }
     const bars = plotData.map((d, i) => (
         // don't draw bars with a value of 0
@@ -272,8 +268,8 @@ const BarTimeSeries: React.FC<BarTimeSeriesProps> = ({
             y={y(d.value)}
             width={barWidth}
             height={height - marginBottom - y(d.value)}
-            stroke={"#fff"}
-            strokeWidth={outline_width}
+            stroke={strokeColor}
+            strokeWidth={outlineWidth}
             fillOpacity={1}
             onMouseOver={() => setHoveredData(d)}
             onMouseOut={() => setHoveredData(null)}
