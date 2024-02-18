@@ -16,6 +16,8 @@
   --accent-3: rgb(90, 186, 183);
   --theme-light-bg: rgb(249, 250, 251);
   --theme-light-bg-2: rgb(3, 7, 18);
+  --theme-light-bg-enabled: rgb(241 245 249);
+  --theme-light-bg-disabled: rgb(229, 231, 235);
   --theme-light-border: rgb(3, 7, 18);
   --theme-light-bg-hover: rgb(249, 250, 251);
   --theme-light-bg-2-hover: rgb(30, 41, 59);
@@ -23,10 +25,15 @@
   --theme-light-text-hover: rgb(17, 24, 39);
   --theme-light-text-2: rgb(249, 250, 251);
   --theme-light-text-2-hover: rgb(255, 255, 255);
+  --theme-light-text-enabled: rgb(51, 65, 85);
+  --theme-light-text-disabled: rgb(156, 163, 175);
+  
   /* --theme-dark-bg: rgb(17, 24, 39); */
   /* --theme-dark-bg-2: rgb(31, 41, 55); */
   --theme-dark-bg: rgb(3, 7, 18);
   --theme-dark-bg-2: rgb(3, 7, 18);
+  --theme-dark-bg-enabled: rgb(30, 41, 59);
+  --theme-dark-bg-disabled: rgb(17, 24, 39);
   /* --theme-dark-border: rgb(249, 250, 251); */
   --theme-dark-border: rgb(249, 250, 251);
   --theme-dark-bg-hover: rgb(51 65 85);
@@ -35,6 +42,8 @@
   --theme-dark-text-hover: rgb(249, 250, 251);
   --theme-dark-text-2: rgb(249, 250, 251);
   --theme-dark-text-2-hover: rgb(249, 250, 251);
+  --theme-dark-text-enabled: rgb(203, 213, 225);
+  --theme-dark-text-disabled: rgb(107, 114, 128);
 }
 
 .form-select {
