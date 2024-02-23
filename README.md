@@ -1,5 +1,17 @@
 # Fearless Fitness Tracker
 
+## Sample Screenshots
+
+![Build a Routine screenshot](https://raw.githubusercontent.com/blsmxiu47/fearless-fitness-tracker/main/images/screenshot-build-routine.png)
+
+![Training Plan page screenshot](https://raw.githubusercontent.com/blsmxiu47/fearless-fitness-tracker/main/images/screenshot-training-plan.png)
+
+![Explore screenshot](https://raw.githubusercontent.com/blsmxiu47/fearless-fitness-tracker/main/images/screenshot-explore.png)
+
+![Bar chart screenshot](https://raw.githubusercontent.com/blsmxiu47/fearless-fitness-tracker/main/images/screenshot-bar-chart.png)
+
+---
+
 ## Dev ToDos
 
 * Constrain and handle user import/input of data that exceeds hard data-related limits e.g. max value for integer and bigint fields in the db (e.g. users should not be allowed to enter a workout duration of 100 years, for example, if we store the duration as an INTEGER value in seconds)
